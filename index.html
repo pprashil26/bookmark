@@ -381,7 +381,17 @@ async function init() {
     }
 
     function bindEvents() {
-      els.signInBtn.addEventListener('click', signIn);
+      
+  console.log('bindEvents running');
+  console.log('signInBtn:', els.signInBtn);
+  console.log('signUpBtn:', els.signUpBtn);
+
+  els.signInBtn.addEventListener('click', signIn);
+  els.signUpBtn.addEventListener('click', signUp);
+  els.resetPwdBtn.addEventListener('click', resetPassword);
+  els.signOutBtn.addEventListener('click', signOut);
+
+	  els.signInBtn.addEventListener('click', signIn);
       els.signUpBtn.addEventListener('click', signUp);
       els.resetPwdBtn.addEventListener('click', resetPassword);
       els.signOutBtn.addEventListener('click', signOut);
@@ -440,6 +450,24 @@ async function init() {
     }
 
     async function signIn() {
+	
+  console.log('SIGN IN CLICKED');
+
+  const email = els.authEmail.value.trim();
+  const password = els.authPassword.value.trim();
+  console.log({ email, password });
+
+  if (!email || !password) {
+    return showStatus(els.authStatus, 'Enter email and password.', true);
+  }
+
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  console.log('signin result', { data, error });
+
+  if (error) return showStatus(els.authStatus, error.message || 'Sign in failed.', true);
+  showStatus(els.authStatus, 'Signed in.');
+}
+
       const email = els.authEmail.value.trim();
       const password = els.authPassword.value.trim();
       if (!email || !password) return showStatus(els.authStatus, 'Enter email and password.', true);
@@ -449,6 +477,24 @@ async function init() {
     }
 
     async function signUp() {
+	
+console.log('SIGN UP CLICKED');
+
+  const email = els.authEmail.value.trim();
+  const password = els.authPassword.value.trim();
+  console.log({ email, password });
+
+  if (!email || !password) {
+    return showStatus(els.authStatus, 'Enter email and password.', true);
+  }
+
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  console.log('signup result', { data, error });
+
+  if (error) return showStatus(els.authStatus, error.message || 'Sign up failed.', true);
+  showStatus(els.authStatus, 'Sign up successful. Check your email if confirmation is enabled.');
+}
+
       const email = els.authEmail.value.trim();
       const password = els.authPassword.value.trim();
       if (!email || !password) return showStatus(els.authStatus, 'Enter email and password.', true);
