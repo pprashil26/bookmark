@@ -381,7 +381,6 @@ async function init() {
     }
 
     function bindEvents() {
-      
   console.log('bindEvents running');
   console.log('signInBtn:', els.signInBtn);
   console.log('signUpBtn:', els.signUpBtn);
@@ -391,39 +390,44 @@ async function init() {
   els.resetPwdBtn.addEventListener('click', resetPassword);
   els.signOutBtn.addEventListener('click', signOut);
 
-	  els.signInBtn.addEventListener('click', signIn);
-      els.signUpBtn.addEventListener('click', signUp);
-      els.resetPwdBtn.addEventListener('click', resetPassword);
-      els.signOutBtn.addEventListener('click', signOut);
+  els.searchInput.addEventListener('input', (e) => {
+    state.query = e.target.value.trim().toLowerCase();
+    render();
+  });
 
-      els.searchInput.addEventListener('input', (e) => {
-        state.query = e.target.value.trim().toLowerCase();
-        render();
-      });
+  els.form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await saveBookmark();
+  });
 
-      els.form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await saveBookmark();
-      });
+  els.exportBtn.addEventListener('click', exportBookmarks);
+  els.importBtn.addEventListener('click', () => els.importFile.click());
+  els.importFile.addEventListener('change', importBookmarks);
 
-      els.exportBtn.addEventListener('click', exportBookmarks);
-      els.importBtn.addEventListener('click', () => els.importFile.click());
-      els.importFile.addEventListener('change', importBookmarks);
+  els.galleryViewBtn.addEventListener('click', () => setView('gallery'));
+  els.listViewBtn.addEventListener('click', () => setView('list'));
 
-      els.galleryViewBtn.addEventListener('click', () => setView('gallery'));
-      els.listViewBtn.addEventListener('click', () => setView('list'));
+  els.clearAllBtn.addEventListener('click', async () => {
+    if (!state.bookmarks.length) return;
+    if (!confirm('Clear all bookmarks from your cloud account?')) return;
 
-      els.clearAllBtn.addEventListener('click', async () => {
-        if (!state.bookmarks.length) return;
-        if (!confirm('Clear all bookmarks from your cloud account?')) return;
-        const { error } = await supabase.from('bookmarks').delete().eq('user_id', currentUser.id);
-        if (error) return showStatus(els.appStatus, error.message || 'Could not clear bookmarks.', true);
-        state.bookmarks = [];
-        resetForm();
-        render();
-        showStatus(els.appStatus, 'All cloud bookmarks cleared.');
-      });
+    const { error } = await supabase
+      .from('bookmarks')
+      .delete()
+      .eq('user_id', currentUser.id);
+
+    if (error) {
+      showStatus(els.appStatus, error.message || 'Could not clear bookmarks.', true);
+      return;
     }
+
+    state.bookmarks = [];
+    resetForm();
+    render();
+    showStatus(els.appStatus, 'All cloud bookmarks cleared.');
+  });
+}
+
 
     async function handleSession(user) {
       if (!user) {
@@ -450,7 +454,6 @@ async function init() {
     }
 
     async function signIn() {
-	
   console.log('SIGN IN CLICKED');
 
   const email = els.authEmail.value.trim();
@@ -458,15 +461,25 @@ async function init() {
   console.log({ email, password });
 
   if (!email || !password) {
-    return showStatus(els.authStatus, 'Enter email and password.', true);
+    showStatus(els.authStatus, 'Enter email and password.', true);
+    return;
   }
 
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
   console.log('signin result', { data, error });
 
-  if (error) return showStatus(els.authStatus, error.message || 'Sign in failed.', true);
+  if (error) {
+    showStatus(els.authStatus, error.message || 'Sign in failed.', true);
+    return;
+  }
+
   showStatus(els.authStatus, 'Signed in.');
 }
+
 
       const email = els.authEmail.value.trim();
       const password = els.authPassword.value.trim();
@@ -477,23 +490,35 @@ async function init() {
     }
 
     async function signUp() {
-	
-console.log('SIGN UP CLICKED');
+  console.log('SIGN UP CLICKED');
 
   const email = els.authEmail.value.trim();
   const password = els.authPassword.value.trim();
   console.log({ email, password });
 
   if (!email || !password) {
-    return showStatus(els.authStatus, 'Enter email and password.', true);
+    showStatus(els.authStatus, 'Enter email and password.', true);
+    return;
   }
 
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password
+  });
+
   console.log('signup result', { data, error });
 
-  if (error) return showStatus(els.authStatus, error.message || 'Sign up failed.', true);
-  showStatus(els.authStatus, 'Sign up successful. Check your email if confirmation is enabled.');
+  if (error) {
+    showStatus(els.authStatus, error.message || 'Sign up failed.', true);
+    return;
+  }
+
+  showStatus(
+    els.authStatus,
+    'Sign up successful. Check your email if confirmation is enabled.'
+  );
 }
+
 
       const email = els.authEmail.value.trim();
       const password = els.authPassword.value.trim();
@@ -504,13 +529,26 @@ console.log('SIGN UP CLICKED');
     }
 
     async function resetPassword() {
-      const email = els.authEmail.value.trim();
-      if (!email) return showStatus(els.authStatus, 'Enter your email first.', true);
-      const redirectTo = window.location.origin + window.location.pathname;
-      const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
-      if (error) return showStatus(els.authStatus, error.message || 'Reset failed.', true);
-      showStatus(els.authStatus, 'Password reset email sent.');
-    }
+  const email = els.authEmail.value.trim();
+
+  if (!email) {
+    showStatus(els.authStatus, 'Enter your email first.', true);
+    return;
+  }
+
+  const redirectTo = window.location.origin + window.location.pathname;
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo
+  });
+
+  if (error) {
+    showStatus(els.authStatus, error.message || 'Reset failed.', true);
+    return;
+  }
+
+  showStatus(els.authStatus, 'Password reset email sent.');
+}
 
     async function signOut() {
       const { error } = await supabase.auth.signOut();
