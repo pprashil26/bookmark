@@ -285,536 +285,625 @@
   </template>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    /* ===================== CONFIG =====================
-       Replace both values below with your own Supabase project values.
-       Example:
-       const SUPABASE_URL = 'https://your-project-id.supabase.co';
-       const SUPABASE_ANON_KEY = 'your-anon-key';
-    */
-const SUPABASE_URL = 'https://xqbxmjcgrvrxpdzndknv.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
-const VIEW_KEY = 'beautiful-bookmarks-supabase-view-v1';
+<script>
+  const SUPABASE_URL = 'https://xqbxmjcgrvrxpdzndknv.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
+  const VIEW_KEY = 'beautiful-bookmarks-supabase-view-v1';
 
-const isConfigured =
-  !!SUPABASE_URL &&
-  !!SUPABASE_ANON_KEY &&
-  !SUPABASE_URL.includes('YOUR_SUPABASE_URL') &&
-  !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY');
+  const isConfigured =
+    !!SUPABASE_URL &&
+    !!SUPABASE_ANON_KEY &&
+    !SUPABASE_URL.includes('YOUR_SUPABASE_URL') &&
+    !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY');
 
-let supabase = null;
-let currentUser = null;
-const state = { bookmarks: [], query: '', view: loadView() };
+  let supabase = null;
+  let currentUser = null;
+  const state = { bookmarks: [], query: '', view: loadView() };
 
+  const els = {
+    authShell: document.getElementById('authShell'),
+    appShell: document.getElementById('appShell'),
+    setupBox: document.getElementById('setupBox'),
+    authEmail: document.getElementById('authEmail'),
+    authPassword: document.getElementById('authPassword'),
+    signInBtn: document.getElementById('signInBtn'),
+    signUpBtn: document.getElementById('signUpBtn'),
+    resetPwdBtn: document.getElementById('resetPwdBtn'),
+    authStatus: document.getElementById('authStatus'),
 
-    const els = {
-      authShell: document.getElementById('authShell'),
-      appShell: document.getElementById('appShell'),
-      setupBox: document.getElementById('setupBox'),
-      authEmail: document.getElementById('authEmail'),
-      authPassword: document.getElementById('authPassword'),
-      signInBtn: document.getElementById('signInBtn'),
-      signUpBtn: document.getElementById('signUpBtn'),
-      resetPwdBtn: document.getElementById('resetPwdBtn'),
-      authStatus: document.getElementById('authStatus'),
+    whoami: document.getElementById('whoami'),
+    searchInput: document.getElementById('searchInput'),
+    cards: document.getElementById('cards'),
+    emptyState: document.getElementById('emptyState'),
+    bookmarkCount: document.getElementById('bookmarkCount'),
+    form: document.getElementById('bookmarkForm'),
+    editingId: document.getElementById('editingId'),
+    title: document.getElementById('titleInput'),
+    url: document.getElementById('urlInput'),
+    desc: document.getElementById('descInput'),
+    image: document.getElementById('imageInput'),
+    tag: document.getElementById('tagInput'),
+    saveBtn: document.getElementById('saveBtn'),
+    exportBtn: document.getElementById('exportBtn'),
+    importBtn: document.getElementById('importBtn'),
+    importFile: document.getElementById('importFile'),
+    signOutBtn: document.getElementById('signOutBtn'),
+    clearAllBtn: document.getElementById('clearAllBtn'),
+    galleryViewBtn: document.getElementById('galleryViewBtn'),
+    listViewBtn: document.getElementById('listViewBtn'),
+    cardTemplate: document.getElementById('cardTemplate'),
+    listTemplate: document.getElementById('listTemplate'),
+    appStatus: document.getElementById('appStatus')
+  };
 
-      whoami: document.getElementById('whoami'),
-      searchInput: document.getElementById('searchInput'),
-      cards: document.getElementById('cards'),
-      emptyState: document.getElementById('emptyState'),
-      bookmarkCount: document.getElementById('bookmarkCount'),
-      form: document.getElementById('bookmarkForm'),
-      editingId: document.getElementById('editingId'),
-      title: document.getElementById('titleInput'),
-      url: document.getElementById('urlInput'),
-      desc: document.getElementById('descInput'),
-      image: document.getElementById('imageInput'),
-      tag: document.getElementById('tagInput'),
-      saveBtn: document.getElementById('saveBtn'),
-      exportBtn: document.getElementById('exportBtn'),
-      importBtn: document.getElementById('importBtn'),
-      importFile: document.getElementById('importFile'),
-      signOutBtn: document.getElementById('signOutBtn'),
-      clearAllBtn: document.getElementById('clearAllBtn'),
-      galleryViewBtn: document.getElementById('galleryViewBtn'),
-      listViewBtn: document.getElementById('listViewBtn'),
-      cardTemplate: document.getElementById('cardTemplate'),
-      listTemplate: document.getElementById('listTemplate'),
-      appStatus: document.getElementById('appStatus')
-    };
+  init();
 
-    init();
-
-async function init() {
-  if (!window.supabase) {
-    showStatus(els.authStatus, 'Supabase library failed to load.', true);
-    console.error('window.supabase is undefined');
-    return;
-  }
-
-  if (!isConfigured) {
-    els.setupBox.classList.remove('hidden');
-    showStatus(els.authStatus, 'Add your Supabase URL and anon key first.', true);
-    bindAuthOnly();
-    return;
-  }
-
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  bindEvents();
-  applyViewMode();
-
-  const { data: { session } } = await supabase.auth.getSession();
-  currentUser = session?.user || null;
-  await handleSession(currentUser);
-
-  supabase.auth.onAuthStateChange(async (_event, session) => {
-    currentUser = session?.user || null;
-    await handleSession(currentUser);
-  });
-}
-
-    function bindAuthOnly() {
-      els.signInBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
-      els.signUpBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
-      els.resetPwdBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
-    }
-
-    function bindEvents() {
-  console.log('bindEvents running');
-  console.log('signInBtn:', els.signInBtn);
-  console.log('signUpBtn:', els.signUpBtn);
-
-  els.signInBtn.addEventListener('click', signIn);
-  els.signUpBtn.addEventListener('click', signUp);
-  els.resetPwdBtn.addEventListener('click', resetPassword);
-  els.signOutBtn.addEventListener('click', signOut);
-
-  els.searchInput.addEventListener('input', (e) => {
-    state.query = e.target.value.trim().toLowerCase();
-    render();
-  });
-
-  els.form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    await saveBookmark();
-  });
-
-  els.exportBtn.addEventListener('click', exportBookmarks);
-  els.importBtn.addEventListener('click', () => els.importFile.click());
-  els.importFile.addEventListener('change', importBookmarks);
-
-  els.galleryViewBtn.addEventListener('click', () => setView('gallery'));
-  els.listViewBtn.addEventListener('click', () => setView('list'));
-
-  els.clearAllBtn.addEventListener('click', async () => {
-    if (!state.bookmarks.length) return;
-    if (!confirm('Clear all bookmarks from your cloud account?')) return;
-
-    const { error } = await supabase
-      .from('bookmarks')
-      .delete()
-      .eq('user_id', currentUser.id);
-
-    if (error) {
-      showStatus(els.appStatus, error.message || 'Could not clear bookmarks.', true);
+  async function init() {
+    if (!window.supabase) {
+      showStatus(els.authStatus, 'Supabase library failed to load.', true);
+      console.error('window.supabase is undefined');
       return;
     }
 
-    state.bookmarks = [];
-    resetForm();
-    render();
-    showStatus(els.appStatus, 'All cloud bookmarks cleared.');
-  });
-}
+    if (!isConfigured) {
+      els.setupBox.classList.remove('hidden');
+      showStatus(els.authStatus, 'Add your Supabase URL and anon key first.', true);
+      bindAuthOnly();
+      return;
+    }
 
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function handleSession(user) {
-      if (!user) {
-        state.bookmarks = [];
-        render();
-        els.appShell.classList.add('hidden');
-        els.authShell.classList.remove('hidden');
-        els.whoami.textContent = '';
+    bindEvents();
+    applyViewMode();
+
+    const { data: { session } } = await supabase.auth.getSession();
+    currentUser = session?.user || null;
+    await handleSession(currentUser);
+
+    supabase.auth.onAuthStateChange(async (_event, session) => {
+      currentUser = session?.user || null;
+      await handleSession(currentUser);
+    });
+  }
+
+  function bindAuthOnly() {
+    els.signInBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
+    els.signUpBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
+    els.resetPwdBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
+  }
+
+  function bindEvents() {
+    console.log('bindEvents running');
+    console.log('signInBtn:', els.signInBtn);
+    console.log('signUpBtn:', els.signUpBtn);
+
+    els.signInBtn.addEventListener('click', signIn);
+    els.signUpBtn.addEventListener('click', signUp);
+    els.resetPwdBtn.addEventListener('click', resetPassword);
+    els.signOutBtn.addEventListener('click', signOut);
+
+    els.searchInput.addEventListener('input', (e) => {
+      state.query = e.target.value.trim().toLowerCase();
+      render();
+    });
+
+    els.form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await saveBookmark();
+    });
+
+    els.exportBtn.addEventListener('click', exportBookmarks);
+    els.importBtn.addEventListener('click', () => els.importFile.click());
+    els.importFile.addEventListener('change', importBookmarks);
+
+    els.galleryViewBtn.addEventListener('click', () => setView('gallery'));
+    els.listViewBtn.addEventListener('click', () => setView('list'));
+
+    els.clearAllBtn.addEventListener('click', async () => {
+      if (!state.bookmarks.length) return;
+      if (!confirm('Clear all bookmarks from your cloud account?')) return;
+
+      const { error } = await supabase
+        .from('bookmarks')
+        .delete()
+        .eq('user_id', currentUser.id);
+
+      if (error) {
+        showStatus(els.appStatus, error.message || 'Could not clear bookmarks.', true);
         return;
       }
 
-      els.whoami.textContent = user.email || '(signed in)';
-      els.authShell.classList.add('hidden');
-      els.appShell.classList.remove('hidden');
-      await loadBookmarksFromCloud();
+      state.bookmarks = [];
+      resetForm();
+      render();
+      showStatus(els.appStatus, 'All cloud bookmarks cleared.');
+    });
+  }
+
+  async function handleSession(user) {
+    if (!user) {
+      state.bookmarks = [];
+      render();
+      els.appShell.classList.add('hidden');
+      els.authShell.classList.remove('hidden');
+      els.whoami.textContent = '';
+      return;
     }
 
-    function showStatus(el, message, isError = false) {
-      el.textContent = message;
-      el.style.color = isError ? 'var(--err)' : 'var(--ok)';
-      el.classList.add('show');
-      clearTimeout(el._timer);
-      el._timer = setTimeout(() => el.classList.remove('show'), 3600);
+    els.whoami.textContent = user.email || '(signed in)';
+    els.authShell.classList.add('hidden');
+    els.appShell.classList.remove('hidden');
+    await loadBookmarksFromCloud();
+  }
+
+  function showStatus(el, message, isError = false) {
+    el.textContent = message;
+    el.style.color = isError ? 'var(--err)' : 'var(--ok)';
+    el.classList.add('show');
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => el.classList.remove('show'), 3600);
+  }
+
+  async function signIn() {
+    console.log('SIGN IN CLICKED');
+
+    const email = els.authEmail.value.trim();
+    const password = els.authPassword.value.trim();
+    console.log({ email, password });
+
+    if (!email || !password) {
+      showStatus(els.authStatus, 'Enter email and password.', true);
+      return;
     }
 
-    async function signIn() {
-  console.log('SIGN IN CLICKED');
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
 
-  const email = els.authEmail.value.trim();
-  const password = els.authPassword.value.trim();
-  console.log({ email, password });
+    console.log('signin result', { data, error });
 
-  if (!email || !password) {
-    showStatus(els.authStatus, 'Enter email and password.', true);
-    return;
-  }
-
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  console.log('signin result', { data, error });
-
-  if (error) {
-    showStatus(els.authStatus, error.message || 'Sign in failed.', true);
-    return;
-  }
-
-  showStatus(els.authStatus, 'Signed in.');
-}
-
-
-      const email = els.authEmail.value.trim();
-      const password = els.authPassword.value.trim();
-      if (!email || !password) return showStatus(els.authStatus, 'Enter email and password.', true);
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return showStatus(els.authStatus, error.message || 'Sign in failed.', true);
-      showStatus(els.authStatus, 'Signed in.');
+    if (error) {
+      showStatus(els.authStatus, error.message || 'Sign in failed.', true);
+      return;
     }
 
-    async function signUp() {
-  console.log('SIGN UP CLICKED');
-
-  const email = els.authEmail.value.trim();
-  const password = els.authPassword.value.trim();
-  console.log({ email, password });
-
-  if (!email || !password) {
-    showStatus(els.authStatus, 'Enter email and password.', true);
-    return;
+    showStatus(els.authStatus, 'Signed in.');
   }
 
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password
-  });
+  async function signUp() {
+    console.log('SIGN UP CLICKED');
 
-  console.log('signup result', { data, error });
+    const email = els.authEmail.value.trim();
+    const password = els.authPassword.value.trim();
+    console.log({ email, password });
 
-  if (error) {
-    showStatus(els.authStatus, error.message || 'Sign up failed.', true);
-    return;
-  }
-
-  showStatus(
-    els.authStatus,
-    'Sign up successful. Check your email if confirmation is enabled.'
-  );
-}
-
-
-      const email = els.authEmail.value.trim();
-      const password = els.authPassword.value.trim();
-      if (!email || !password) return showStatus(els.authStatus, 'Enter email and password.', true);
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) return showStatus(els.authStatus, error.message || 'Sign up failed.', true);
-      showStatus(els.authStatus, 'Sign up successful. Check your email if confirmation is enabled.');
+    if (!email || !password) {
+      showStatus(els.authStatus, 'Enter email and password.', true);
+      return;
     }
 
-    async function resetPassword() {
-  const email = els.authEmail.value.trim();
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password
+    });
 
-  if (!email) {
-    showStatus(els.authStatus, 'Enter your email first.', true);
-    return;
-  }
+    console.log('signup result', { data, error });
 
-  const redirectTo = window.location.origin + window.location.pathname;
-
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo
-  });
-
-  if (error) {
-    showStatus(els.authStatus, error.message || 'Reset failed.', true);
-    return;
-  }
-
-  showStatus(els.authStatus, 'Password reset email sent.');
-}
-
-    async function signOut() {
-      const { error } = await supabase.auth.signOut();
-      if (error) return showStatus(els.appStatus, error.message || 'Sign out failed.', true);
-      showStatus(els.authStatus, 'Signed out.');
+    if (error) {
+      showStatus(els.authStatus, error.message || 'Sign up failed.', true);
+      return;
     }
 
-    async function loadBookmarksFromCloud() {
+    showStatus(
+      els.authStatus,
+      'Sign up successful. Check your email if confirmation is enabled.'
+    );
+  }
+
+  async function resetPassword() {
+    const email = els.authEmail.value.trim();
+
+    if (!email) {
+      showStatus(els.authStatus, 'Enter your email first.', true);
+      return;
+    }
+
+    const redirectTo = window.location.origin + window.location.pathname;
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo
+    });
+
+    if (error) {
+      showStatus(els.authStatus, error.message || 'Reset failed.', true);
+      return;
+    }
+
+    showStatus(els.authStatus, 'Password reset email sent.');
+  }
+
+  async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      showStatus(els.appStatus, error.message || 'Sign out failed.', true);
+      return;
+    }
+    showStatus(els.authStatus, 'Signed out.');
+  }
+
+  async function loadBookmarksFromCloud() {
+    const { data, error } = await supabase
+      .from('bookmarks')
+      .select('id, user_id, title, url, description, image, tag, created_at, updated_at')
+      .order('updated_at', { ascending: false, nullsFirst: false })
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      state.bookmarks = [];
+      render();
+      showStatus(els.appStatus, error.message || 'Could not load bookmarks. Check table + RLS setup.', true);
+      return;
+    }
+
+    state.bookmarks = Array.isArray(data) ? data : [];
+    render();
+    showStatus(els.appStatus, 'Bookmarks loaded from cloud.');
+  }
+
+  async function saveBookmark() {
+    const title = els.title.value.trim();
+    const url = normalizeUrl(els.url.value.trim());
+    const description = els.desc.value.trim();
+    const image = els.image.value.trim();
+    const tag = els.tag.value.trim() || 'Saved';
+    const editingId = els.editingId.value.trim();
+
+    if (!title || !url) {
+      showStatus(els.appStatus, 'Please enter both title and URL.', true);
+      return;
+    }
+
+    if (!isValidUrl(url)) {
+      showStatus(els.appStatus, 'Please enter a valid URL.', true);
+      return;
+    }
+
+    if (image && !isLikelyUrl(image)) {
+      showStatus(els.appStatus, 'Thumbnail image URL is not valid.', true);
+      return;
+    }
+
+    if (editingId) {
+      const payload = {
+        title,
+        url,
+        description: description || 'Quick access bookmark',
+        image,
+        tag,
+        updated_at: new Date().toISOString()
+      };
+
       const { data, error } = await supabase
         .from('bookmarks')
-        .select('id, user_id, title, url, description, image, tag, created_at, updated_at')
-        .order('updated_at', { ascending: false, nullsFirst: false })
-        .order('created_at', { ascending: false });
+        .update(payload)
+        .eq('id', editingId)
+        .select()
+        .single();
+
       if (error) {
-        state.bookmarks = [];
-        render();
-        return showStatus(els.appStatus, error.message || 'Could not load bookmarks. Check table + RLS setup.', true);
-      }
-      state.bookmarks = Array.isArray(data) ? data : [];
-      render();
-      showStatus(els.appStatus, 'Bookmarks loaded from cloud.');
-    }
-
-    async function saveBookmark() {
-      const title = els.title.value.trim();
-      const url = normalizeUrl(els.url.value.trim());
-      const description = els.desc.value.trim();
-      const image = els.image.value.trim();
-      const tag = els.tag.value.trim() || 'Saved';
-      const editingId = els.editingId.value.trim();
-
-      if (!title || !url) return showStatus(els.appStatus, 'Please enter both title and URL.', true);
-      if (!isValidUrl(url)) return showStatus(els.appStatus, 'Please enter a valid URL.', true);
-      if (image && !isLikelyUrl(image)) return showStatus(els.appStatus, 'Thumbnail image URL is not valid.', true);
-
-      if (editingId) {
-        const payload = { title, url, description: description || 'Quick access bookmark', image, tag, updated_at: new Date().toISOString() };
-        const { data, error } = await supabase
-          .from('bookmarks')
-          .update(payload)
-          .eq('id', editingId)
-          .select()
-          .single();
-        if (error) return showStatus(els.appStatus, error.message || 'Update failed.', true);
-        state.bookmarks = state.bookmarks.map((b) => b.id === editingId ? data : b);
-        resetForm();
-        render();
-        showStatus(els.appStatus, 'Bookmark updated in cloud.');
-      } else {
-        const payload = { user_id: currentUser.id, title, url, description: description || 'Quick access bookmark', image, tag };
-    const { data, error } = await supabase.from('bookmarks').insert(payload).select().single();
-        if (error) return showStatus(els.appStatus, error.message || 'Save failed.', true);
-        state.bookmarks.unshift(data);
-        resetForm();
-        render();
-        showStatus(els.appStatus, 'Bookmark saved to cloud.');
-      }
-    }
-
-    async function deleteBookmark(id) {
-      const item = state.bookmarks.find((b) => b.id === id);
-      if (!item) return;
-      if (!confirm(`Delete "${item.title}"?`)) return;
-      const { error } = await supabase.from('bookmarks').delete().eq('id', id);
-      if (error) return showStatus(els.appStatus, error.message || 'Delete failed.', true);
-      state.bookmarks = state.bookmarks.filter((b) => b.id !== id);
-      if (els.editingId.value === id) resetForm();
-      render();
-      showStatus(els.appStatus, 'Bookmark deleted from cloud.');
-    }
-
-    function editBookmark(id) {
-      const item = state.bookmarks.find((b) => b.id === id);
-      if (!item) return;
-      els.editingId.value = item.id;
-      els.title.value = item.title || '';
-      els.url.value = item.url || '';
-      els.desc.value = item.description || '';
-      els.image.value = item.image || '';
-      els.tag.value = item.tag || '';
-      els.saveBtn.textContent = 'Update bookmark';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      els.title.focus();
-    }
-
-    function resetForm() {
-      els.form.reset();
-      els.editingId.value = '';
-      els.saveBtn.textContent = 'Save bookmark';
-    }
-
-    function render() {
-      const filtered = state.bookmarks.filter((item) => matchesQuery(item, state.query));
-      els.cards.innerHTML = '';
-      els.bookmarkCount.textContent = String(state.bookmarks.length);
-
-      if (!filtered.length) {
-        els.emptyState.classList.remove('hidden');
-        els.cards.classList.add('hidden');
+        showStatus(els.appStatus, error.message || 'Update failed.', true);
         return;
       }
-      els.emptyState.classList.add('hidden');
-      els.cards.classList.remove('hidden');
 
-      for (const item of filtered) {
-        els.cards.appendChild(state.view === 'gallery' ? buildGalleryCard(item) : buildListItem(item));
+      state.bookmarks = state.bookmarks.map((b) => b.id === editingId ? data : b);
+      resetForm();
+      render();
+      showStatus(els.appStatus, 'Bookmark updated in cloud.');
+    } else {
+      const payload = {
+        user_id: currentUser.id,
+        title,
+        url,
+        description: description || 'Quick access bookmark',
+        image,
+        tag
+      };
+
+      const { data, error } = await supabase
+        .from('bookmarks')
+        .insert(payload)
+        .select()
+        .single();
+
+      if (error) {
+        showStatus(els.appStatus, error.message || 'Save failed.', true);
+        return;
       }
+
+      state.bookmarks.unshift(data);
+      resetForm();
+      render();
+      showStatus(els.appStatus, 'Bookmark saved to cloud.');
+    }
+  }
+
+  async function deleteBookmark(id) {
+    const item = state.bookmarks.find((b) => b.id === id);
+    if (!item) return;
+    if (!confirm(`Delete "${item.title}"?`)) return;
+
+    const { error } = await supabase.from('bookmarks').delete().eq('id', id);
+
+    if (error) {
+      showStatus(els.appStatus, error.message || 'Delete failed.', true);
+      return;
     }
 
-    function buildGalleryCard(item) {
-      const node = els.cardTemplate.content.firstElementChild.cloneNode(true);
-      const link = node.querySelector('.card-link');
-      const title = node.querySelector('[data-title]');
-      const desc = node.querySelector('[data-desc]');
-      const tag = node.querySelector('[data-tag]');
-      const domain = node.querySelector('[data-domain]');
-      const initials = node.querySelector('[data-initials]');
-      const img = node.querySelector('.thumb-img');
-      const fallback = node.querySelector('.thumb-fallback');
-      const editBtn = node.querySelector('[data-edit]');
-      const deleteBtn = node.querySelector('[data-delete]');
+    state.bookmarks = state.bookmarks.filter((b) => b.id !== id);
+    if (els.editingId.value === id) resetForm();
+    render();
+    showStatus(els.appStatus, 'Bookmark deleted from cloud.');
+  }
 
-      link.href = item.url;
-      title.textContent = item.title || 'Untitled';
-      desc.textContent = item.description || 'Quick access bookmark';
-      tag.textContent = item.tag || 'Saved';
-      domain.textContent = getDomain(item.url);
-      initials.textContent = getInitials(item.title, item.url);
+  function editBookmark(id) {
+    const item = state.bookmarks.find((b) => b.id === id);
+    if (!item) return;
 
-      if (item.image && isLikelyUrl(item.image)) {
-        img.src = item.image;
-        img.alt = item.title || 'Bookmark thumbnail';
-        img.hidden = false;
-        fallback.hidden = true;
-        img.onerror = () => { img.hidden = true; fallback.hidden = false; };
-      } else {
+    els.editingId.value = item.id;
+    els.title.value = item.title || '';
+    els.url.value = item.url || '';
+    els.desc.value = item.description || '';
+    els.image.value = item.image || '';
+    els.tag.value = item.tag || '';
+    els.saveBtn.textContent = 'Update bookmark';
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    els.title.focus();
+  }
+
+  function resetForm() {
+    els.form.reset();
+    els.editingId.value = '';
+    els.saveBtn.textContent = 'Save bookmark';
+  }
+
+  function render() {
+    const filtered = state.bookmarks.filter((item) => matchesQuery(item, state.query));
+    els.cards.innerHTML = '';
+    els.bookmarkCount.textContent = String(state.bookmarks.length);
+
+    if (!filtered.length) {
+      els.emptyState.classList.remove('hidden');
+      els.cards.classList.add('hidden');
+      return;
+    }
+
+    els.emptyState.classList.add('hidden');
+    els.cards.classList.remove('hidden');
+
+    for (const item of filtered) {
+      els.cards.appendChild(state.view === 'gallery' ? buildGalleryCard(item) : buildListItem(item));
+    }
+  }
+
+  function buildGalleryCard(item) {
+    const node = els.cardTemplate.content.firstElementChild.cloneNode(true);
+    const link = node.querySelector('.card-link');
+    const title = node.querySelector('[data-title]');
+    const desc = node.querySelector('[data-desc]');
+    const tag = node.querySelector('[data-tag]');
+    const domain = node.querySelector('[data-domain]');
+    const initials = node.querySelector('[data-initials]');
+    const img = node.querySelector('.thumb-img');
+    const fallback = node.querySelector('.thumb-fallback');
+    const editBtn = node.querySelector('[data-edit]');
+    const deleteBtn = node.querySelector('[data-delete]');
+
+    link.href = item.url;
+    title.textContent = item.title || 'Untitled';
+    desc.textContent = item.description || 'Quick access bookmark';
+    tag.textContent = item.tag || 'Saved';
+    domain.textContent = getDomain(item.url);
+    initials.textContent = getInitials(item.title, item.url);
+
+    if (item.image && isLikelyUrl(item.image)) {
+      img.src = item.image;
+      img.alt = item.title || 'Bookmark thumbnail';
+      img.hidden = false;
+      fallback.hidden = true;
+      img.onerror = () => {
         img.hidden = true;
         fallback.hidden = false;
-      }
-
-      editBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); editBookmark(item.id); });
-      deleteBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); deleteBookmark(item.id); });
-      return node;
-    }
-
-    function buildListItem(item) {
-      const node = els.listTemplate.content.firstElementChild.cloneNode(true);
-      const main = node.querySelector('.list-main');
-      const title = node.querySelector('[data-title]');
-      const tag = node.querySelector('[data-tag]');
-      const domain = node.querySelector('[data-domain]');
-      const editBtn = node.querySelector('[data-edit]');
-      const deleteBtn = node.querySelector('[data-delete]');
-
-      main.href = item.url;
-      title.textContent = item.title || 'Untitled';
-      tag.textContent = (item.tag || 'Saved').slice(0, 10);
-      domain.textContent = getDomain(item.url);
-      editBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); editBookmark(item.id); });
-      deleteBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); deleteBookmark(item.id); });
-      return node;
-    }
-
-    function setView(mode) {
-      state.view = mode === 'list' ? 'list' : 'gallery';
-      try { localStorage.setItem(VIEW_KEY, state.view); } catch {}
-      applyViewMode();
-      render();
-    }
-
-    function loadView() {
-      try { return localStorage.getItem(VIEW_KEY) === 'list' ? 'list' : 'gallery'; } catch { return 'gallery'; }
-    }
-
-    function applyViewMode() {
-      els.cards.classList.toggle('gallery-view', state.view === 'gallery');
-      els.cards.classList.toggle('list-view', state.view === 'list');
-      els.galleryViewBtn.classList.toggle('active', state.view === 'gallery');
-      els.listViewBtn.classList.toggle('active', state.view === 'list');
-    }
-
-    function matchesQuery(item, query) {
-      if (!query) return true;
-      const hay = [item.title, item.description, item.tag, item.url, getDomain(item.url)].filter(Boolean).join(' ').toLowerCase();
-      return hay.includes(query);
-    }
-
-    function exportBookmarks() {
-      const blob = new Blob([JSON.stringify(state.bookmarks, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'bookmarks-export.json';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    async function importBookmarks(event) {
-      const file = event.target.files && event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = async () => {
-        try {
-          const parsed = JSON.parse(String(reader.result || '[]'));
-          if (!Array.isArray(parsed)) throw new Error('Invalid file');
-          const sanitized = parsed.filter(isValidBookmark).map((item) => ({
-            user_id: currentUser.id,
-            title: String(item.title || '').trim(),
-            url: normalizeUrl(String(item.url || '').trim()),
-            description: String(item.description || item.desc || 'Quick access bookmark').trim(),
-            image: String(item.image || '').trim(),
-            tag: String(item.tag || 'Saved').trim()
-          }));
-          if (!sanitized.length) return showStatus(els.appStatus, 'No valid bookmarks found in file.', true);
-          const { error } = await supabase.from('bookmarks').insert(sanitized);
-          if (error) return showStatus(els.appStatus, error.message || 'Import failed.', true);
-          els.importFile.value = '';
-          await loadBookmarksFromCloud();
-          showStatus(els.appStatus, 'Bookmarks imported to cloud.');
-        } catch {
-          showStatus(els.appStatus, 'Import failed. Choose a valid bookmarks JSON file.', true);
-        }
       };
-      reader.readAsText(file);
+    } else {
+      img.hidden = true;
+      fallback.hidden = false;
     }
 
-    function getInitials(title, url) {
-      const source = String(title || getDomain(url) || 'BM').trim();
-      const parts = source.replace(/https?:\/\//gi, '').split(/[^A-Za-z0-9]+/).filter(Boolean);
-      const chars = (parts[0]?.[0] || '') + (parts[1]?.[0] || parts[0]?.[1] || '');
-      return (chars.toUpperCase() || 'BM').slice(0, 2);
-    }
+    editBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      editBookmark(item.id);
+    });
 
-    function getDomain(url) {
-      try { return new URL(normalizeUrl(url)).hostname.replace(/^www\./, ''); } catch { return url || ''; }
-    }
+    deleteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      deleteBookmark(item.id);
+    });
 
-    function isValidBookmark(item) {
-      if (!item || typeof item !== 'object') return false;
-      const title = String(item.title || '').trim();
-      const url = normalizeUrl(String(item.url || '').trim());
-      return !!title && isValidUrl(url);
-    }
+    return node;
+  }
 
-    function normalizeUrl(value) {
-      if (!value) return '';
-      if (/^https?:\/\//i.test(value)) return value;
-      return 'https://' + value;
-    }
+  function buildListItem(item) {
+    const node = els.listTemplate.content.firstElementChild.cloneNode(true);
+    const main = node.querySelector('.list-main');
+    const title = node.querySelector('[data-title]');
+    const tag = node.querySelector('[data-tag]');
+    const domain = node.querySelector('[data-domain]');
+    const editBtn = node.querySelector('[data-edit]');
+    const deleteBtn = node.querySelector('[data-delete]');
 
-    function isValidUrl(value) {
-      try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol); } catch { return false; }
-    }
+    main.href = item.url;
+    title.textContent = item.title || 'Untitled';
+    tag.textContent = (item.tag || 'Saved').slice(0, 10);
+    domain.textContent = getDomain(item.url);
 
-    function isLikelyUrl(value) {
-      try { new URL(value); return true; } catch { return false; }
-    }
+    editBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      editBookmark(item.id);
+    });
 
-    function cryptoRandomId() {
-      return window.crypto && typeof window.crypto.randomUUID === 'function'
-        ? window.crypto.randomUUID()
-        : 'id-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    deleteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      deleteBookmark(item.id);
+    });
+
+    return node;
+  }
+
+  function setView(mode) {
+    state.view = mode === 'list' ? 'list' : 'gallery';
+    try {
+      localStorage.setItem(VIEW_KEY, state.view);
+    } catch {}
+    applyViewMode();
+    render();
+  }
+
+  function loadView() {
+    try {
+      return localStorage.getItem(VIEW_KEY) === 'list' ? 'list' : 'gallery';
+    } catch {
+      return 'gallery';
     }
-	
+  }
+
+  function applyViewMode() {
+    els.cards.classList.toggle('gallery-view', state.view === 'gallery');
+    els.cards.classList.toggle('list-view', state.view === 'list');
+    els.galleryViewBtn.classList.toggle('active', state.view === 'gallery');
+    els.listViewBtn.classList.toggle('active', state.view === 'list');
+  }
+
+  function matchesQuery(item, query) {
+    if (!query) return true;
+    const hay = [item.title, item.description, item.tag, item.url, getDomain(item.url)]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    return hay.includes(query);
+  }
+
+  function exportBookmarks() {
+    const blob = new Blob([JSON.stringify(state.bookmarks, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'bookmarks-export.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function importBookmarks(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const parsed = JSON.parse(String(reader.result || '[]'));
+        if (!Array.isArray(parsed)) throw new Error('Invalid file');
+
+        const sanitized = parsed.filter(isValidBookmark).map((item) => ({
+          user_id: currentUser.id,
+          title: String(item.title || '').trim(),
+          url: normalizeUrl(String(item.url || '').trim()),
+          description: String(item.description || item.desc || 'Quick access bookmark').trim(),
+          image: String(item.image || '').trim(),
+          tag: String(item.tag || 'Saved').trim()
+        }));
+
+        if (!sanitized.length) {
+          showStatus(els.appStatus, 'No valid bookmarks found in file.', true);
+          return;
+        }
+
+        const { error } = await supabase.from('bookmarks').insert(sanitized);
+
+        if (error) {
+          showStatus(els.appStatus, error.message || 'Import failed.', true);
+          return;
+        }
+
+        els.importFile.value = '';
+        await loadBookmarksFromCloud();
+        showStatus(els.appStatus, 'Bookmarks imported to cloud.');
+      } catch {
+        showStatus(els.appStatus, 'Import failed. Choose a valid bookmarks JSON file.', true);
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
+  function getInitials(title, url) {
+    const source = String(title || getDomain(url) || 'BM').trim();
+    const parts = source.replace(/https?:\/\//gi, '').split(/[^A-Za-z0-9]+/).filter(Boolean);
+    const chars = (parts[0]?.[0] || '') + (parts[1]?.[0] || parts[0]?.[1] || '');
+    return (chars.toUpperCase() || 'BM').slice(0, 2);
+  }
+
+  function getDomain(url) {
+    try {
+      return new URL(normalizeUrl(url)).hostname.replace(/^www\./, '');
+    } catch {
+      return url || '';
+    }
+  }
+
+  function isValidBookmark(item) {
+    if (!item || typeof item !== 'object') return false;
+    const title = String(item.title || '').trim();
+    const url = normalizeUrl(String(item.url || '').trim());
+    return !!title && isValidUrl(url);
+  }
+
+  function normalizeUrl(value) {
+    if (!value) return '';
+    if (/^https?:\/\//i.test(value)) return value;
+    return 'https://' + value;
+  }
+
+  function isValidUrl(value) {
+    try {
+      const url = new URL(value);
+      return ['http:', 'https:'].includes(url.protocol);
+    } catch {
+      return false;
+    }
+  }
+
+  function isLikelyUrl(value) {
+    try {
+      new URL(value);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function cryptoRandomId() {
+    return window.crypto && typeof window.crypto.randomUUID === 'function'
+      ? window.crypto.randomUUID()
+      : 'id-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
   </script>
 </body>
 </html>
