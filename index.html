@@ -293,11 +293,15 @@
        const SUPABASE_ANON_KEY = 'your-anon-key';
     */
     const SUPABASE_URL = 'https://xqbxmjcgrvrxpdzndknv.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
-    /* ================================================= */
+const SUPABASE_ANON_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
 
-    const VIEW_KEY = 'beautiful-bookmarks-supabase-view-v1';
-    const isConfigured = !SUPABASE_URL.includes('https://xqbxmjcgrvrxpdzndknv.supabase.co') && !SUPABASE_ANON_KEY.includes('sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB');
+const VIEW_KEY = 'beautiful-bookmarks-supabase-view-v1';
+const isConfigured =
+  SUPABASE_URL &&
+  SUPABASE_ANON_KEY &&
+  !SUPABASE_URL.includes('https://xqbxmjcgrvrxpdzndknv.supabase.co') &&
+  !SUPABASE_ANON_KEY.includes('sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB');
+
 
     let supabase = null;
     let currentUser = null;
@@ -464,7 +468,7 @@
     async function loadBookmarksFromCloud() {
       const { data, error } = await supabase
         .from('bookmarks')
-        .select('id, user_id, title, url, desc, image, tag, created_at, updated_at')
+        .select('id, user_id, title, url, description, image, tag, created_at, updated_at')
         .order('updated_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false });
       if (error) {
@@ -480,7 +484,7 @@
     async function saveBookmark() {
       const title = els.title.value.trim();
       const url = normalizeUrl(els.url.value.trim());
-      const desc = els.desc.value.trim();
+      const description = els.desc.value.trim();
       const image = els.image.value.trim();
       const tag = els.tag.value.trim() || 'Saved';
       const editingId = els.editingId.value.trim();
@@ -490,7 +494,8 @@
       if (image && !isLikelyUrl(image)) return showStatus(els.appStatus, 'Thumbnail image URL is not valid.', true);
 
       if (editingId) {
-        const payload = { title, url, desc: desc || 'Quick access bookmark', image, tag, updated_at: new Date().toISOString() };
+        const payload = { title, url, description: description || 'Quick access bookmark', image, tag, updated_at: new Date().toISOString() };
+``
         const { data, error } = await supabase
           .from('bookmarks')
           .update(payload)
@@ -503,7 +508,8 @@
         render();
         showStatus(els.appStatus, 'Bookmark updated in cloud.');
       } else {
-        const payload = { user_id: currentUser.id, title, url, desc: desc || 'Quick access bookmark', image, tag };
+        const payload = { user_id: currentUser.id, title, url, description: description || 'Quick access bookmark', image, tag };
+``
         const { data, error } = await supabase.from('bookmarks').insert(payload).select().single();
         if (error) return showStatus(els.appStatus, error.message || 'Save failed.', true);
         state.bookmarks.unshift(data);
@@ -531,7 +537,8 @@
       els.editingId.value = item.id;
       els.title.value = item.title || '';
       els.url.value = item.url || '';
-      els.desc.value = item.desc || '';
+      els.desc.value = item.description || '';
+``
       els.image.value = item.image || '';
       els.tag.value = item.tag || '';
       els.saveBtn.textContent = 'Update bookmark';
@@ -578,7 +585,8 @@
 
       link.href = item.url;
       title.textContent = item.title || 'Untitled';
-      desc.textContent = item.desc || 'Quick access bookmark';
+      desc.textContent = item.description || 'Quick access bookmark';
+``
       tag.textContent = item.tag || 'Saved';
       domain.textContent = getDomain(item.url);
       initials.textContent = getInitials(item.title, item.url);
@@ -637,7 +645,7 @@
 
     function matchesQuery(item, query) {
       if (!query) return true;
-      const hay = [item.title, item.desc, item.tag, item.url, getDomain(item.url)].filter(Boolean).join(' ').toLowerCase();
+      const hay = [item.title, item.description, item.tag, item.url, getDomain(item.url)].filter(Boolean).join(' ').toLowerCase();
       return hay.includes(query);
     }
 
@@ -665,7 +673,7 @@
             user_id: currentUser.id,
             title: String(item.title || '').trim(),
             url: normalizeUrl(String(item.url || '').trim()),
-            desc: String(item.desc || 'Quick access bookmark').trim(),
+            description: String(item.description || item.desc || 'Quick access bookmark').trim(),
             image: String(item.image || '').trim(),
             tag: String(item.tag || 'Saved').trim()
           }));
