@@ -292,20 +292,20 @@
        const SUPABASE_URL = 'https://your-project-id.supabase.co';
        const SUPABASE_ANON_KEY = 'your-anon-key';
     */
-    const SUPABASE_URL = 'https://xqbxmjcgrvrxpdzndknv.supabase.co';
+const SUPABASE_URL = 'https://xqbxmjcgrvrxpdzndknv.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
-
 const VIEW_KEY = 'beautiful-bookmarks-supabase-view-v1';
+
 const isConfigured =
-  SUPABASE_URL &&
-  SUPABASE_ANON_KEY &&
-  !SUPABASE_URL.includes('https://xqbxmjcgrvrxpdzndknv.supabase.co') &&
-  !SUPABASE_ANON_KEY.includes('sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB');
+  !!SUPABASE_URL &&
+  !!SUPABASE_ANON_KEY &&
+  !SUPABASE_URL.includes('YOUR_SUPABASE_URL') &&
+  !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY');
 
+let supabase = null;
+let currentUser = null;
+const state = { bookmarks: [], query: '', view: loadView() };
 
-    let supabase = null;
-    let currentUser = null;
-    const state = { bookmarks: [], query: '', view: loadView() };
 
     const els = {
       authShell: document.getElementById('authShell'),
@@ -345,27 +345,34 @@ const isConfigured =
 
     init();
 
-    async function init() {
-      if (!isConfigured) {
-        els.setupBox.classList.remove('hidden');
-        showStatus(els.authStatus, 'Add your Supabase URL and anon key first.', true);
-        bindAuthOnly();
-        return;
-      }
+async function init() {
+  if (!window.supabase) {
+    showStatus(els.authStatus, 'Supabase library failed to load.', true);
+    console.error('window.supabase is undefined');
+    return;
+  }
 
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      bindEvents();
-      applyViewMode();
+  if (!isConfigured) {
+    els.setupBox.classList.remove('hidden');
+    showStatus(els.authStatus, 'Add your Supabase URL and anon key first.', true);
+    bindAuthOnly();
+    return;
+  }
 
-      const { data: { session } } = await supabase.auth.getSession();
-      currentUser = session?.user || null;
-      await handleSession(currentUser);
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      supabase.auth.onAuthStateChange(async (_event, session) => {
-        currentUser = session?.user || null;
-        await handleSession(currentUser);
-      });
-    }
+  bindEvents();
+  applyViewMode();
+
+  const { data: { session } } = await supabase.auth.getSession();
+  currentUser = session?.user || null;
+  await handleSession(currentUser);
+
+  supabase.auth.onAuthStateChange(async (_event, session) => {
+    currentUser = session?.user || null;
+    await handleSession(currentUser);
+  });
+}
 
     function bindAuthOnly() {
       els.signInBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
@@ -495,7 +502,6 @@ const isConfigured =
 
       if (editingId) {
         const payload = { title, url, description: description || 'Quick access bookmark', image, tag, updated_at: new Date().toISOString() };
-``
         const { data, error } = await supabase
           .from('bookmarks')
           .update(payload)
@@ -509,8 +515,7 @@ const isConfigured =
         showStatus(els.appStatus, 'Bookmark updated in cloud.');
       } else {
         const payload = { user_id: currentUser.id, title, url, description: description || 'Quick access bookmark', image, tag };
-``
-        const { data, error } = await supabase.from('bookmarks').insert(payload).select().single();
+    const { data, error } = await supabase.from('bookmarks').insert(payload).select().single();
         if (error) return showStatus(els.appStatus, error.message || 'Save failed.', true);
         state.bookmarks.unshift(data);
         resetForm();
@@ -538,7 +543,6 @@ const isConfigured =
       els.title.value = item.title || '';
       els.url.value = item.url || '';
       els.desc.value = item.description || '';
-``
       els.image.value = item.image || '';
       els.tag.value = item.tag || '';
       els.saveBtn.textContent = 'Update bookmark';
@@ -586,7 +590,6 @@ const isConfigured =
       link.href = item.url;
       title.textContent = item.title || 'Untitled';
       desc.textContent = item.description || 'Quick access bookmark';
-``
       tag.textContent = item.tag || 'Saved';
       domain.textContent = getDomain(item.url);
       initials.textContent = getInitials(item.title, item.url);
@@ -727,6 +730,7 @@ const isConfigured =
         ? window.crypto.randomUUID()
         : 'id-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
     }
+	
   </script>
 </body>
 </html>
