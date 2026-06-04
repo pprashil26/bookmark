@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
   <title>My Beautiful Bookmarks — Supabase</title>
-  <meta name="description" content="Beautiful bookmark app with Supabase login and synced bookmarks across devices." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <meta name='description' content='Beautiful bookmark app with Supabase login and synced bookmarks across devices.' />
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link href='https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap' rel='stylesheet'>
   <style>
     :root {
       --text: rgba(255,255,255,.96);
@@ -27,7 +27,7 @@
     body {
       margin: 0;
       color: var(--text);
-      font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background:
         radial-gradient(circle at 15% 10%, rgba(125,149,255,.18), transparent 28%),
         radial-gradient(circle at 85% 12%, rgba(255,156,214,.12), transparent 22%),
@@ -45,22 +45,19 @@
       background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--muted);
       font-size: 11px; letter-spacing: .25em; text-transform: uppercase; backdrop-filter: var(--blur);
     }
-    h1 { font-family: "Playfair Display", Georgia, serif; margin: 14px 0 10px; font-weight: 700; line-height: 1.02; font-size: clamp(2.3rem, 5vw, 4.4rem); letter-spacing: -.03em; }
+    h1 { font-family: 'Playfair Display', Georgia, serif; margin: 14px 0 10px; font-weight: 700; line-height: 1.02; font-size: clamp(2.3rem, 5vw, 4.4rem); letter-spacing: -.03em; }
     .subtitle { margin: 0; max-width: 820px; color: var(--muted); font-size: clamp(.95rem, 1.4vw, 1.08rem); line-height: 1.75; }
     .glass { background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)); border: 1px solid var(--line); backdrop-filter: var(--blur); box-shadow: var(--shadow); }
     .panel { border-radius: var(--radius-xl); padding: 18px; margin-bottom: 18px; }
     .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .panel-title { margin: 0; font-size: 1.05rem; font-weight: 700; }
     .panel-note { margin: 4px 0 0; font-size: .82rem; color: var(--soft); }
-
     .status { margin-top: 10px; font-size: .78rem; display: none; }
     .status.show { display: block; }
-
     .search-wrap { display:flex; align-items:center; gap:12px; min-height:62px; padding:0 16px; border-radius:20px; }
     .search-wrap svg { width:18px; height:18px; color: var(--soft); }
     .search-wrap input { width:100%; border:none; outline:none; background:transparent; color:var(--text); font-size:.98rem; }
     .search-wrap input::placeholder { color: rgba(255,255,255,.42); }
-
     .bar-chip, .secondary-btn, .ghost-btn, .view-btn {
       border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--muted);
       min-height:36px; padding:0 14px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
@@ -71,7 +68,6 @@
     .view-btn.active { color:#0c1330; background: linear-gradient(180deg,#fff,#e8ebff); border-color:transparent; font-weight:800; box-shadow: 0 8px 18px rgba(255,255,255,.10); }
     .primary-btn { border:none; border-radius:16px; min-height:48px; padding:0 18px; background: linear-gradient(180deg,#fff,#e8ebff); color:#0c1330; font-weight:800; cursor:pointer; box-shadow:0 12px 22px rgba(255,255,255,.10); transition:160ms ease; }
     .primary-btn:hover { transform: translateY(-1px) scale(1.01); }
-
     .form-grid { display:grid; grid-template-columns:1.1fr 1.7fr 1.5fr 1.7fr .8fr auto; gap:12px; }
     .field { min-width:0; }
     .field input {
@@ -80,15 +76,12 @@
     }
     .field input:focus { border-color: rgba(255,255,255,.22); box-shadow: 0 0 0 4px rgba(255,255,255,.05); }
     .field input::placeholder { color: rgba(255,255,255,.36); }
-
     .toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:12px 0 16px; flex-wrap:wrap; }
     .toolbar-left, .toolbar-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
     .toolbar-label { font-size:.88rem; font-weight:700; color:rgba(255,255,255,.9); }
     .muted { color:var(--soft); font-size:.8rem; }
-
     .cards.gallery-view { display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:16px; }
     .cards.list-view { display:flex; flex-direction:column; gap:2px; }
-
     .card {
       display:flex; flex-direction:column; overflow:hidden; border-radius:28px;
       background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
@@ -118,10 +111,7 @@
     .card-footer { margin-top:14px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
     .domain { font-size:.75rem; color:var(--soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .visit-pill { padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.84); font-size:.78rem; font-weight:700; white-space:nowrap; }
-
-    .cards.list-view .list-item, .cards.list-view .list-title, .cards.list-view .list-domain, .cards.list-view .tiny-chip {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    }
+    .cards.list-view .list-item, .cards.list-view .list-title, .cards.list-view .list-domain, .cards.list-view .tiny-chip { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; }
     .list-item { display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:6px; align-items:center; padding:3px 6px; min-height:28px; border-radius:8px; border:1px solid rgba(255,255,255,.05); background:rgba(255,255,255,.02); box-shadow:none; }
     .list-item:hover { border-color:rgba(255,255,255,.10); background:rgba(255,255,255,.04); }
     .list-main { min-width:0; display:block; padding-right:2px; }
@@ -130,19 +120,8 @@
     .list-meta { min-width:0; display:flex; align-items:center; gap:6px; justify-content:flex-end; }
     .list-domain { font-size:.66rem; color:var(--soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:160px; opacity:.88; }
     .list-actions { display:flex; align-items:center; gap:3px; }
-
-    .auth-shell { min-height:100vh; display:grid; place-items:center; padding:22px; }
-    .auth-card { width:min(100%, 520px); border-radius:30px; padding:24px; }
-    .auth-title { margin:8px 0 8px; font-size:2rem; font-weight:800; letter-spacing:-.03em; }
-    .auth-sub { margin:0 0 18px; color:var(--muted); line-height:1.7; }
-    .auth-stack { display:grid; gap:12px; }
-    .auth-actions { display:flex; gap:10px; flex-wrap:wrap; }
-    .setup-box { margin-top:16px; padding:14px; border-radius:18px; border:1px dashed rgba(255,255,255,.18); background:rgba(255,255,255,.03); color:var(--muted); font-size:.84rem; line-height:1.7; }
-    .code-inline { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color:#fff; }
-
     .empty { display:grid; place-items:center; min-height:260px; border-radius:28px; border:1px dashed rgba(255,255,255,.18); background:rgba(255,255,255,.04); padding:28px; text-align:center; }
     .footer-note { margin-top:18px; color:var(--soft); font-size:.78rem; text-align:center; }
-
     @media (max-width:1400px) { .cards.gallery-view { grid-template-columns:repeat(4, minmax(0,1fr)); } }
     @media (max-width:1100px) {
       .topbar { grid-template-columns:1fr; }
@@ -164,746 +143,575 @@
       .card-body { padding:13px 14px 14px; }
       .thumb-top { top:10px; left:10px; right:10px; }
       .chip { max-width:68%; }
-      .auth-card { padding:18px; }
     }
   </style>
 </head>
 <body>
-  <section id="authShell" class="auth-shell">
-    <div class="auth-card glass">
-      <div class="eyebrow">Bookmarks · Cloud Sync</div>
-      <h1 class="auth-title">Sign in to your bookmark app</h1>
-      <p class="auth-sub">This version uses Supabase Authentication and a Supabase database, so your bookmarks can sync across devices after login.</p>
-
-      <div class="auth-stack">
-        <label class="field"><input id="authEmail" type="email" placeholder="Email address" autocomplete="email" /></label>
-        <label class="field"><input id="authPassword" type="password" placeholder="Password" autocomplete="current-password" /></label>
+  <section id='authShell' class='auth-shell'>
+    <div class='auth-card glass'>
+      <div class='eyebrow'>Bookmarks · Cloud Sync</div>
+      <h1 class='auth-title'>Sign in to your bookmark app</h1>
+      <p class='auth-sub'>This version uses Supabase Authentication and a Supabase database, so your bookmarks can sync across devices after login.</p>
+      <div class='auth-stack'>
+        <label class='field'><input id='authEmail' type='email' placeholder='Email address' autocomplete='email' /></label>
+        <label class='field'><input id='authPassword' type='password' placeholder='Password' autocomplete='current-password' /></label>
       </div>
-
-      <div class="auth-actions" style="margin-top:14px;">
-        <button id="signInBtn" class="primary-btn" type="button">Sign in</button>
-        <button id="signUpBtn" class="secondary-btn" type="button">Sign up</button>
-        <button id="resetPwdBtn" class="ghost-btn" type="button">Reset password</button>
+      <div class='auth-actions' style='margin-top:14px;'>
+        <button id='signInBtn' class='primary-btn' type='button'>Sign in</button>
+        <button id='signUpBtn' class='secondary-btn' type='button'>Sign up</button>
+        <button id='resetPwdBtn' class='ghost-btn' type='button'>Reset password</button>
       </div>
-
-      <div id="authStatus" class="status"></div>
-
-      <div id="setupBox" class="setup-box hidden">
+      <div id='authStatus' class='status'></div>
+      <div id='setupBox' class='setup-box hidden'>
         <strong>Setup needed:</strong><br>
         Add your Supabase project URL and anon key in the config section near the top of the file.<br>
-        Then create a <span class="code-inline">bookmarks</span> table and enable RLS as shown in the chat instructions.
+        Then create a <span class='code-inline'>bookmarks</span> table and enable RLS as shown in the chat instructions.
       </div>
     </div>
   </section>
 
-  <main id="appShell" class="container hidden">
-    <section class="topbar">
+  <main id='appShell' class='container hidden'>
+    <section class='topbar'>
       <div>
-        <div class="eyebrow">Personal Space</div>
+        <div class='eyebrow'>Personal Space</div>
         <h1>My Beautiful Bookmarks</h1>
-        <p class="subtitle">A compact, elegant bookmark wall inspired by YouTube-style thumbnails — now backed by Supabase login and synced bookmarks.</p>
+        <p class='subtitle'>A compact, elegant bookmark wall inspired by YouTube-style thumbnails — now backed by Supabase login and synced bookmarks.</p>
       </div>
-      <label class="search-wrap glass" aria-label="Search bookmarks">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input id="searchInput" type="search" placeholder="Search bookmarks by title, tag, description, or domain..." autocomplete="off" />
+      <label class='search-wrap glass' aria-label='Search bookmarks'>
+        <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='7'></circle><line x1='21' y1='21' x2='16.65' y2='16.65'></line></svg>
+        <input id='searchInput' type='search' placeholder='Search bookmarks by title, tag, description, or domain...' autocomplete='off' />
       </label>
     </section>
 
-    <section class="panel glass">
-      <div class="panel-head">
+    <section class='panel glass'>
+      <div class='panel-head'>
         <div>
-          <h2 class="panel-title">Add or edit bookmark</h2>
-          <p class="panel-note">Signed in as <span id="whoami" class="code-inline"></span></p>
+          <h2 class='panel-title'>Add or edit bookmark</h2>
+          <p class='panel-note'>Signed in as <span id='whoami' class='code-inline'></span></p>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <div class="bar-chip"><span id="bookmarkCount">0</span> saved</div>
-          <button class="secondary-btn" id="exportBtn" type="button">Export JSON</button>
-          <button class="secondary-btn" id="importBtn" type="button">Import JSON</button>
-          <button class="ghost-btn" id="signOutBtn" type="button">Sign out</button>
-          <input id="importFile" type="file" accept="application/json" class="hidden" />
+        <div style='display:flex;gap:10px;flex-wrap:wrap;'>
+          <div class='bar-chip'><span id='bookmarkCount'>0</span> saved</div>
+          <button class='secondary-btn' id='exportBtn' type='button'>Export JSON</button>
+          <button class='secondary-btn' id='importBtn' type='button'>Import JSON</button>
+          <button class='ghost-btn' id='signOutBtn' type='button'>Sign out</button>
+          <input id='importFile' type='file' accept='application/json' class='hidden' />
         </div>
       </div>
 
-      <form id="bookmarkForm" class="form-grid" autocomplete="off">
-        <input type="hidden" id="editingId" />
-        <label class="field"><input id="titleInput" type="text" placeholder="Title *" maxlength="90" required /></label>
-        <label class="field"><input id="urlInput" type="url" placeholder="URL * (https://...)" required /></label>
-        <label class="field"><input id="descInput" type="text" placeholder="Short description" maxlength="180" /></label>
-        <label class="field"><input id="imageInput" type="url" placeholder="Thumbnail image URL (optional)" /></label>
-        <label class="field"><input id="tagInput" type="text" placeholder="Tag" maxlength="36" /></label>
-        <button class="primary-btn" id="saveBtn" type="submit">Save bookmark</button>
+      <form id='bookmarkForm' class='form-grid' autocomplete='off'>
+        <input type='hidden' id='editingId' />
+        <label class='field'><input id='titleInput' type='text' placeholder='Title *' maxlength='90' required /></label>
+        <label class='field'><input id='urlInput' type='url' placeholder='URL * (https://...)' required /></label>
+        <label class='field'><input id='descInput' type='text' placeholder='Short description' maxlength='180' /></label>
+        <label class='field'><input id='imageInput' type='url' placeholder='Thumbnail image URL (optional)' /></label>
+        <label class='field'><input id='tagInput' type='text' placeholder='Tag' maxlength='36' /></label>
+        <button class='primary-btn' id='saveBtn' type='submit'>Save bookmark</button>
       </form>
-      <div id="appStatus" class="status"></div>
+      <div id='appStatus' class='status'></div>
     </section>
 
-    <section class="toolbar">
-      <div class="toolbar-left">
-        <div class="toolbar-label">Saved links</div>
-        <div class="muted">5 cards per row on desktop · gallery/text toggle · cloud sync</div>
+    <section class='toolbar'>
+      <div class='toolbar-left'>
+        <div class='toolbar-label'>Saved links</div>
+        <div class='muted'>5 cards per row on desktop · gallery/text toggle · cloud sync</div>
       </div>
-      <div class="toolbar-right">
-        <div class="view-switch" aria-label="Display mode">
-          <button class="view-btn active" id="galleryViewBtn" type="button">Gallery</button>
-          <button class="view-btn" id="listViewBtn" type="button">Text</button>
+      <div class='toolbar-right'>
+        <div class='view-switch' aria-label='Display mode'>
+          <button class='view-btn active' id='galleryViewBtn' type='button'>Gallery</button>
+          <button class='view-btn' id='listViewBtn' type='button'>Text</button>
         </div>
-        <button class="ghost-btn" id="clearAllBtn" type="button">Clear all</button>
+        <button class='ghost-btn' id='clearAllBtn' type='button'>Clear all</button>
       </div>
     </section>
 
-    <section id="cards" class="cards gallery-view" aria-live="polite"></section>
-    <section id="emptyState" class="empty hidden"><div><h3>No bookmarks to show</h3><p>Add your first bookmark above. It will be stored in Supabase and available after login from another device.</p></div></section>
-    <p class="footer-note">Hosted on GitHub Pages. Auth and bookmark syncing handled by Supabase.</p>
+    <section id='cards' class='cards gallery-view' aria-live='polite'></section>
+    <section id='emptyState' class='empty hidden'><div><h3>No bookmarks to show</h3><p>Add your first bookmark above. It will be stored in Supabase and available after login from another device.</p></div></section>
+    <p class='footer-note'>Hosted on GitHub Pages. Auth and bookmark syncing handled by Supabase.</p>
   </main>
 
-  <template id="cardTemplate">
-    <article class="card">
-      <a class="card-link" target="_blank" rel="noopener noreferrer">
-        <div class="thumb-wrap">
-          <div class="thumb-fallback"><div class="thumb-pattern"></div><div class="thumb-icon" data-initials></div></div>
-          <img class="thumb-img" alt="" hidden />
-          <div class="thumb-overlay"></div>
-          <div class="thumb-top">
-            <div class="chip" data-tag></div>
-            <div style="display:flex;gap:6px;"><button class="icon-btn" type="button" data-edit title="Edit bookmark">E</button><button class="icon-btn" type="button" data-delete title="Delete bookmark">X</button></div>
+  <template id='cardTemplate'>
+    <article class='card'>
+      <a class='card-link' target='_blank' rel='noopener noreferrer'>
+        <div class='thumb-wrap'>
+          <div class='thumb-fallback'><div class='thumb-pattern'></div><div class='thumb-icon' data-initials></div></div>
+          <img class='thumb-img' alt='' hidden />
+          <div class='thumb-overlay'></div>
+          <div class='thumb-top'>
+            <div class='chip' data-tag></div>
+            <div style='display:flex;gap:6px;'><button class='icon-btn' type='button' data-edit title='Edit bookmark'>E</button><button class='icon-btn' type='button' data-delete title='Delete bookmark'>X</button></div>
           </div>
         </div>
-        <div class="card-body">
-          <div class="card-title-row"><h3 class="card-title" data-title></h3><div class="tiny-chip">LINK</div></div>
-          <p class="card-desc" data-desc></p>
-          <div class="card-footer"><div class="domain" data-domain></div><div class="visit-pill">Visit →</div></div>
+        <div class='card-body'>
+          <div class='card-title-row'><h3 class='card-title' data-title></h3><div class='tiny-chip'>LINK</div></div>
+          <p class='card-desc' data-desc></p>
+          <div class='card-footer'><div class='domain' data-domain></div><div class='visit-pill'>Visit →</div></div>
         </div>
       </a>
     </article>
   </template>
 
-  <template id="listTemplate">
-    <article class="list-item">
-      <a class="list-main" target="_blank" rel="noopener noreferrer"><div class="list-title-row"><div class="list-title" data-title></div><div class="tiny-chip" data-tag></div></div></a>
-      <div class="list-meta"><div class="list-domain" data-domain></div></div>
-      <div class="list-actions"><button class="icon-btn" type="button" data-edit title="Edit bookmark">E</button><button class="icon-btn" type="button" data-delete title="Delete bookmark">X</button></div>
+  <template id='listTemplate'>
+    <article class='list-item'>
+      <a class='list-main' target='_blank' rel='noopener noreferrer'><div class='list-title-row'><div class='list-title' data-title></div><div class='tiny-chip' data-tag></div></div></a>
+      <div class='list-meta'><div class='list-domain' data-domain></div></div>
+      <div class='list-actions'><button class='icon-btn' type='button' data-edit title='Edit bookmark'>E</button><button class='icon-btn' type='button' data-delete title='Delete bookmark'>X</button></div>
     </article>
   </template>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = 'https://xqbxmjcgrvrxpdzndknv.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
-  const VIEW_KEY = 'beautiful-bookmarks-supabase-view-v1';
-
-  const isConfigured =
-    !!SUPABASE_URL &&
-    !!SUPABASE_ANON_KEY &&
-    !SUPABASE_URL.includes('YOUR_SUPABASE_URL') &&
-    !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY');
-
-  let supabase = null;
-  let currentUser = null;
-  const state = { bookmarks: [], query: '', view: loadView() };
-
-  const els = {
-    authShell: document.getElementById('authShell'),
-    appShell: document.getElementById('appShell'),
-    setupBox: document.getElementById('setupBox'),
-    authEmail: document.getElementById('authEmail'),
-    authPassword: document.getElementById('authPassword'),
-    signInBtn: document.getElementById('signInBtn'),
-    signUpBtn: document.getElementById('signUpBtn'),
-    resetPwdBtn: document.getElementById('resetPwdBtn'),
-    authStatus: document.getElementById('authStatus'),
-
-    whoami: document.getElementById('whoami'),
-    searchInput: document.getElementById('searchInput'),
-    cards: document.getElementById('cards'),
-    emptyState: document.getElementById('emptyState'),
-    bookmarkCount: document.getElementById('bookmarkCount'),
-    form: document.getElementById('bookmarkForm'),
-    editingId: document.getElementById('editingId'),
-    title: document.getElementById('titleInput'),
-    url: document.getElementById('urlInput'),
-    desc: document.getElementById('descInput'),
-    image: document.getElementById('imageInput'),
-    tag: document.getElementById('tagInput'),
-    saveBtn: document.getElementById('saveBtn'),
-    exportBtn: document.getElementById('exportBtn'),
-    importBtn: document.getElementById('importBtn'),
-    importFile: document.getElementById('importFile'),
-    signOutBtn: document.getElementById('signOutBtn'),
-    clearAllBtn: document.getElementById('clearAllBtn'),
-    galleryViewBtn: document.getElementById('galleryViewBtn'),
-    listViewBtn: document.getElementById('listViewBtn'),
-    cardTemplate: document.getElementById('cardTemplate'),
-    listTemplate: document.getElementById('listTemplate'),
-    appStatus: document.getElementById('appStatus')
-  };
-
-  init();
-
-  async function init() {
-    if (!window.supabase) {
-      showStatus(els.authStatus, 'Supabase library failed to load.', true);
-      console.error('window.supabase is undefined');
-      return;
-    }
-
-    if (!isConfigured) {
-      els.setupBox.classList.remove('hidden');
-      showStatus(els.authStatus, 'Add your Supabase URL and anon key first.', true);
-      bindAuthOnly();
-      return;
-    }
-
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    bindEvents();
-    applyViewMode();
-
-    const { data: { session } } = await supabase.auth.getSession();
-    currentUser = session?.user || null;
-    await handleSession(currentUser);
-
-    supabase.auth.onAuthStateChange(async (_event, session) => {
-      currentUser = session?.user || null;
-      await handleSession(currentUser);
-    });
-  }
-
-  function bindAuthOnly() {
-    els.signInBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
-    els.signUpBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
-    els.resetPwdBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
-  }
-
-  function bindEvents() {
-    console.log('bindEvents running');
-    console.log('signInBtn:', els.signInBtn);
-    console.log('signUpBtn:', els.signUpBtn);
-
-    els.signInBtn.addEventListener('click', signIn);
-    els.signUpBtn.addEventListener('click', signUp);
-    els.resetPwdBtn.addEventListener('click', resetPassword);
-    els.signOutBtn.addEventListener('click', signOut);
-
-    els.searchInput.addEventListener('input', (e) => {
-      state.query = e.target.value.trim().toLowerCase();
-      render();
-    });
-
-    els.form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      await saveBookmark();
-    });
-
-    els.exportBtn.addEventListener('click', exportBookmarks);
-    els.importBtn.addEventListener('click', () => els.importFile.click());
-    els.importFile.addEventListener('change', importBookmarks);
-
-    els.galleryViewBtn.addEventListener('click', () => setView('gallery'));
-    els.listViewBtn.addEventListener('click', () => setView('list'));
-
-    els.clearAllBtn.addEventListener('click', async () => {
-      if (!state.bookmarks.length) return;
-      if (!confirm('Clear all bookmarks from your cloud account?')) return;
-
-      const { error } = await supabase
-        .from('bookmarks')
-        .delete()
-        .eq('user_id', currentUser.id);
-
-      if (error) {
-        showStatus(els.appStatus, error.message || 'Could not clear bookmarks.', true);
-        return;
-      }
-
-      state.bookmarks = [];
-      resetForm();
-      render();
-      showStatus(els.appStatus, 'All cloud bookmarks cleared.');
-    });
-  }
-
-  async function handleSession(user) {
-    if (!user) {
-      state.bookmarks = [];
-      render();
-      els.appShell.classList.add('hidden');
-      els.authShell.classList.remove('hidden');
-      els.whoami.textContent = '';
-      return;
-    }
-
-    els.whoami.textContent = user.email || '(signed in)';
-    els.authShell.classList.add('hidden');
-    els.appShell.classList.remove('hidden');
-    await loadBookmarksFromCloud();
-  }
-
-  function showStatus(el, message, isError = false) {
-    el.textContent = message;
-    el.style.color = isError ? 'var(--err)' : 'var(--ok)';
-    el.classList.add('show');
-    clearTimeout(el._timer);
-    el._timer = setTimeout(() => el.classList.remove('show'), 3600);
-  }
-
-  async function signIn() {
-    console.log('SIGN IN CLICKED');
-
-    const email = els.authEmail.value.trim();
-    const password = els.authPassword.value.trim();
-    console.log({ email, password });
-
-    if (!email || !password) {
-      showStatus(els.authStatus, 'Enter email and password.', true);
-      return;
-    }
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    console.log('signin result', { data, error });
-
-    if (error) {
-      showStatus(els.authStatus, error.message || 'Sign in failed.', true);
-      return;
-    }
-
-    showStatus(els.authStatus, 'Signed in.');
-  }
-
-  async function signUp() {
-    console.log('SIGN UP CLICKED');
-
-    const email = els.authEmail.value.trim();
-    const password = els.authPassword.value.trim();
-    console.log({ email, password });
-
-    if (!email || !password) {
-      showStatus(els.authStatus, 'Enter email and password.', true);
-      return;
-    }
-
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password
-    });
-
-    console.log('signup result', { data, error });
-
-    if (error) {
-      showStatus(els.authStatus, error.message || 'Sign up failed.', true);
-      return;
-    }
-
-    showStatus(
-      els.authStatus,
-      'Sign up successful. Check your email if confirmation is enabled.'
-    );
-  }
-
-  async function resetPassword() {
-    const email = els.authEmail.value.trim();
-
-    if (!email) {
-      showStatus(els.authStatus, 'Enter your email first.', true);
-      return;
-    }
-
-    const redirectTo = window.location.origin + window.location.pathname;
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo
-    });
-
-    if (error) {
-      showStatus(els.authStatus, error.message || 'Reset failed.', true);
-      return;
-    }
-
-    showStatus(els.authStatus, 'Password reset email sent.');
-  }
-
-  async function signOut() {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      showStatus(els.appStatus, error.message || 'Sign out failed.', true);
-      return;
-    }
-    showStatus(els.authStatus, 'Signed out.');
-  }
-
-  async function loadBookmarksFromCloud() {
-    const { data, error } = await supabase
-      .from('bookmarks')
-      .select('id, user_id, title, url, description, image, tag, created_at, updated_at')
-      .order('updated_at', { ascending: false, nullsFirst: false })
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      state.bookmarks = [];
-      render();
-      showStatus(els.appStatus, error.message || 'Could not load bookmarks. Check table + RLS setup.', true);
-      return;
-    }
-
-    state.bookmarks = Array.isArray(data) ? data : [];
-    render();
-    showStatus(els.appStatus, 'Bookmarks loaded from cloud.');
-  }
-
-  async function saveBookmark() {
-    const title = els.title.value.trim();
-    const url = normalizeUrl(els.url.value.trim());
-    const description = els.desc.value.trim();
-    const image = els.image.value.trim();
-    const tag = els.tag.value.trim() || 'Saved';
-    const editingId = els.editingId.value.trim();
-
-    if (!title || !url) {
-      showStatus(els.appStatus, 'Please enter both title and URL.', true);
-      return;
-    }
-
-    if (!isValidUrl(url)) {
-      showStatus(els.appStatus, 'Please enter a valid URL.', true);
-      return;
-    }
-
-    if (image && !isLikelyUrl(image)) {
-      showStatus(els.appStatus, 'Thumbnail image URL is not valid.', true);
-      return;
-    }
-
-    if (editingId) {
-      const payload = {
-        title,
-        url,
-        description: description || 'Quick access bookmark',
-        image,
-        tag,
-        updated_at: new Date().toISOString()
-      };
-
-      const { data, error } = await supabase
-        .from('bookmarks')
-        .update(payload)
-        .eq('id', editingId)
-        .select()
-        .single();
-
-      if (error) {
-        showStatus(els.appStatus, error.message || 'Update failed.', true);
-        return;
-      }
-
-      state.bookmarks = state.bookmarks.map((b) => b.id === editingId ? data : b);
-      resetForm();
-      render();
-      showStatus(els.appStatus, 'Bookmark updated in cloud.');
-    } else {
-      const payload = {
-        user_id: currentUser.id,
-        title,
-        url,
-        description: description || 'Quick access bookmark',
-        image,
-        tag
-      };
-
-      const { data, error } = await supabase
-        .from('bookmarks')
-        .insert(payload)
-        .select()
-        .single();
-
-      if (error) {
-        showStatus(els.appStatus, error.message || 'Save failed.', true);
-        return;
-      }
-
-      state.bookmarks.unshift(data);
-      resetForm();
-      render();
-      showStatus(els.appStatus, 'Bookmark saved to cloud.');
-    }
-  }
-
-  async function deleteBookmark(id) {
-    const item = state.bookmarks.find((b) => b.id === id);
-    if (!item) return;
-    if (!confirm(`Delete "${item.title}"?`)) return;
-
-    const { error } = await supabase.from('bookmarks').delete().eq('id', id);
-
-    if (error) {
-      showStatus(els.appStatus, error.message || 'Delete failed.', true);
-      return;
-    }
-
-    state.bookmarks = state.bookmarks.filter((b) => b.id !== id);
-    if (els.editingId.value === id) resetForm();
-    render();
-    showStatus(els.appStatus, 'Bookmark deleted from cloud.');
-  }
-
-  function editBookmark(id) {
-    const item = state.bookmarks.find((b) => b.id === id);
-    if (!item) return;
-
-    els.editingId.value = item.id;
-    els.title.value = item.title || '';
-    els.url.value = item.url || '';
-    els.desc.value = item.description || '';
-    els.image.value = item.image || '';
-    els.tag.value = item.tag || '';
-    els.saveBtn.textContent = 'Update bookmark';
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    els.title.focus();
-  }
-
-  function resetForm() {
-    els.form.reset();
-    els.editingId.value = '';
-    els.saveBtn.textContent = 'Save bookmark';
-  }
-
-  function render() {
-    const filtered = state.bookmarks.filter((item) => matchesQuery(item, state.query));
-    els.cards.innerHTML = '';
-    els.bookmarkCount.textContent = String(state.bookmarks.length);
-
-    if (!filtered.length) {
-      els.emptyState.classList.remove('hidden');
-      els.cards.classList.add('hidden');
-      return;
-    }
-
-    els.emptyState.classList.add('hidden');
-    els.cards.classList.remove('hidden');
-
-    for (const item of filtered) {
-      els.cards.appendChild(state.view === 'gallery' ? buildGalleryCard(item) : buildListItem(item));
-    }
-  }
-
-  function buildGalleryCard(item) {
-    const node = els.cardTemplate.content.firstElementChild.cloneNode(true);
-    const link = node.querySelector('.card-link');
-    const title = node.querySelector('[data-title]');
-    const desc = node.querySelector('[data-desc]');
-    const tag = node.querySelector('[data-tag]');
-    const domain = node.querySelector('[data-domain]');
-    const initials = node.querySelector('[data-initials]');
-    const img = node.querySelector('.thumb-img');
-    const fallback = node.querySelector('.thumb-fallback');
-    const editBtn = node.querySelector('[data-edit]');
-    const deleteBtn = node.querySelector('[data-delete]');
-
-    link.href = item.url;
-    title.textContent = item.title || 'Untitled';
-    desc.textContent = item.description || 'Quick access bookmark';
-    tag.textContent = item.tag || 'Saved';
-    domain.textContent = getDomain(item.url);
-    initials.textContent = getInitials(item.title, item.url);
-
-    if (item.image && isLikelyUrl(item.image)) {
-      img.src = item.image;
-      img.alt = item.title || 'Bookmark thumbnail';
-      img.hidden = false;
-      fallback.hidden = true;
-      img.onerror = () => {
-        img.hidden = true;
-        fallback.hidden = false;
-      };
-    } else {
-      img.hidden = true;
-      fallback.hidden = false;
-    }
-
-    editBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      editBookmark(item.id);
-    });
-
-    deleteBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      deleteBookmark(item.id);
-    });
-
-    return node;
-  }
-
-  function buildListItem(item) {
-    const node = els.listTemplate.content.firstElementChild.cloneNode(true);
-    const main = node.querySelector('.list-main');
-    const title = node.querySelector('[data-title]');
-    const tag = node.querySelector('[data-tag]');
-    const domain = node.querySelector('[data-domain]');
-    const editBtn = node.querySelector('[data-edit]');
-    const deleteBtn = node.querySelector('[data-delete]');
-
-    main.href = item.url;
-    title.textContent = item.title || 'Untitled';
-    tag.textContent = (item.tag || 'Saved').slice(0, 10);
-    domain.textContent = getDomain(item.url);
-
-    editBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      editBookmark(item.id);
-    });
-
-    deleteBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      deleteBookmark(item.id);
-    });
-
-    return node;
-  }
-
-  function setView(mode) {
-    state.view = mode === 'list' ? 'list' : 'gallery';
-    try {
-      localStorage.setItem(VIEW_KEY, state.view);
-    } catch {}
-    applyViewMode();
-    render();
-  }
-
-  function loadView() {
-    try {
-      return localStorage.getItem(VIEW_KEY) === 'list' ? 'list' : 'gallery';
-    } catch {
-      return 'gallery';
-    }
-  }
-
-  function applyViewMode() {
-    els.cards.classList.toggle('gallery-view', state.view === 'gallery');
-    els.cards.classList.toggle('list-view', state.view === 'list');
-    els.galleryViewBtn.classList.toggle('active', state.view === 'gallery');
-    els.listViewBtn.classList.toggle('active', state.view === 'list');
-  }
-
-  function matchesQuery(item, query) {
-    if (!query) return true;
-    const hay = [item.title, item.description, item.tag, item.url, getDomain(item.url)]
-      .filter(Boolean)
-      .join(' ')
-      .toLowerCase();
-    return hay.includes(query);
-  }
-
-  function exportBookmarks() {
-    const blob = new Blob([JSON.stringify(state.bookmarks, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'bookmarks-export.json';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  async function importBookmarks(event) {
-    const file = event.target.files && event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        const parsed = JSON.parse(String(reader.result || '[]'));
-        if (!Array.isArray(parsed)) throw new Error('Invalid file');
-
-        const sanitized = parsed.filter(isValidBookmark).map((item) => ({
-          user_id: currentUser.id,
-          title: String(item.title || '').trim(),
-          url: normalizeUrl(String(item.url || '').trim()),
-          description: String(item.description || item.desc || 'Quick access bookmark').trim(),
-          image: String(item.image || '').trim(),
-          tag: String(item.tag || 'Saved').trim()
-        }));
-
-        if (!sanitized.length) {
-          showStatus(els.appStatus, 'No valid bookmarks found in file.', true);
-          return;
-        }
-
-        const { error } = await supabase.from('bookmarks').insert(sanitized);
-
-        if (error) {
-          showStatus(els.appStatus, error.message || 'Import failed.', true);
-          return;
-        }
-
-        els.importFile.value = '';
-        await loadBookmarksFromCloud();
-        showStatus(els.appStatus, 'Bookmarks imported to cloud.');
-      } catch {
-        showStatus(els.appStatus, 'Import failed. Choose a valid bookmarks JSON file.', true);
-      }
+  <script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'></script>
+  <script>
+    const SUPABASE_URL = 'https://xqbxmjcgrvrxpdzndknv.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
+    const VIEW_KEY = 'beautiful-bookmarks-supabase-view-v1';
+
+    const isConfigured = !!SUPABASE_URL && !!SUPABASE_ANON_KEY && !SUPABASE_URL.includes('YOUR_SUPABASE_URL') && !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY');
+
+    let supabase = null;
+    let currentUser = null;
+    const state = { bookmarks: [], query: '', view: loadView() };
+
+    const els = {
+      authShell: document.getElementById('authShell'),
+      appShell: document.getElementById('appShell'),
+      setupBox: document.getElementById('setupBox'),
+      authEmail: document.getElementById('authEmail'),
+      authPassword: document.getElementById('authPassword'),
+      signInBtn: document.getElementById('signInBtn'),
+      signUpBtn: document.getElementById('signUpBtn'),
+      resetPwdBtn: document.getElementById('resetPwdBtn'),
+      authStatus: document.getElementById('authStatus'),
+      whoami: document.getElementById('whoami'),
+      searchInput: document.getElementById('searchInput'),
+      cards: document.getElementById('cards'),
+      emptyState: document.getElementById('emptyState'),
+      bookmarkCount: document.getElementById('bookmarkCount'),
+      form: document.getElementById('bookmarkForm'),
+      editingId: document.getElementById('editingId'),
+      title: document.getElementById('titleInput'),
+      url: document.getElementById('urlInput'),
+      desc: document.getElementById('descInput'),
+      image: document.getElementById('imageInput'),
+      tag: document.getElementById('tagInput'),
+      saveBtn: document.getElementById('saveBtn'),
+      exportBtn: document.getElementById('exportBtn'),
+      importBtn: document.getElementById('importBtn'),
+      importFile: document.getElementById('importFile'),
+      signOutBtn: document.getElementById('signOutBtn'),
+      clearAllBtn: document.getElementById('clearAllBtn'),
+      galleryViewBtn: document.getElementById('galleryViewBtn'),
+      listViewBtn: document.getElementById('listViewBtn'),
+      cardTemplate: document.getElementById('cardTemplate'),
+      listTemplate: document.getElementById('listTemplate'),
+      appStatus: document.getElementById('appStatus')
     };
 
-    reader.readAsText(file);
-  }
+    init();
 
-  function getInitials(title, url) {
-    const source = String(title || getDomain(url) || 'BM').trim();
-    const parts = source.replace(/https?:\/\//gi, '').split(/[^A-Za-z0-9]+/).filter(Boolean);
-    const chars = (parts[0]?.[0] || '') + (parts[1]?.[0] || parts[0]?.[1] || '');
-    return (chars.toUpperCase() || 'BM').slice(0, 2);
-  }
+    async function init() {
+      if (!window.supabase) {
+        showStatus(els.authStatus, 'Supabase library failed to load.', true);
+        console.error('window.supabase is undefined');
+        return;
+      }
+      if (!isConfigured) {
+        els.setupBox.classList.remove('hidden');
+        showStatus(els.authStatus, 'Add your Supabase URL and anon key first.', true);
+        bindAuthOnly();
+        return;
+      }
 
-  function getDomain(url) {
-    try {
-      return new URL(normalizeUrl(url)).hostname.replace(/^www\./, '');
-    } catch {
-      return url || '';
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      bindEvents();
+      applyViewMode();
+
+      const { data: { session } } = await supabase.auth.getSession();
+      currentUser = session?.user || null;
+      await handleSession(currentUser);
+
+      supabase.auth.onAuthStateChange(async (_event, session) => {
+        currentUser = session?.user || null;
+        await handleSession(currentUser);
+      });
     }
-  }
 
-  function isValidBookmark(item) {
-    if (!item || typeof item !== 'object') return false;
-    const title = String(item.title || '').trim();
-    const url = normalizeUrl(String(item.url || '').trim());
-    return !!title && isValidUrl(url);
-  }
-
-  function normalizeUrl(value) {
-    if (!value) return '';
-    if (/^https?:\/\//i.test(value)) return value;
-    return 'https://' + value;
-  }
-
-  function isValidUrl(value) {
-    try {
-      const url = new URL(value);
-      return ['http:', 'https:'].includes(url.protocol);
-    } catch {
-      return false;
+    function bindAuthOnly() {
+      els.signInBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
+      els.signUpBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
+      els.resetPwdBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
     }
-  }
 
-  function isLikelyUrl(value) {
-    try {
-      new URL(value);
-      return true;
-    } catch {
-      return false;
+    function bindEvents() {
+      console.log('bindEvents running');
+      console.log('signInBtn:', els.signInBtn);
+      console.log('signUpBtn:', els.signUpBtn);
+
+      els.signInBtn.addEventListener('click', signIn);
+      els.signUpBtn.addEventListener('click', signUp);
+      els.resetPwdBtn.addEventListener('click', resetPassword);
+      els.signOutBtn.addEventListener('click', signOut);
+
+      els.searchInput.addEventListener('input', (e) => {
+        state.query = e.target.value.trim().toLowerCase();
+        render();
+      });
+
+      els.form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveBookmark();
+      });
+
+      els.exportBtn.addEventListener('click', exportBookmarks);
+      els.importBtn.addEventListener('click', () => els.importFile.click());
+      els.importFile.addEventListener('change', importBookmarks);
+      els.galleryViewBtn.addEventListener('click', () => setView('gallery'));
+      els.listViewBtn.addEventListener('click', () => setView('list'));
+
+      els.clearAllBtn.addEventListener('click', async () => {
+        if (!state.bookmarks.length) return;
+        if (!confirm('Clear all bookmarks from your cloud account?')) return;
+        const { error } = await supabase.from('bookmarks').delete().eq('user_id', currentUser.id);
+        if (error) {
+          showStatus(els.appStatus, error.message || 'Could not clear bookmarks.', true);
+          return;
+        }
+        state.bookmarks = [];
+        resetForm();
+        render();
+        showStatus(els.appStatus, 'All cloud bookmarks cleared.');
+      });
     }
-  }
 
-  function cryptoRandomId() {
-    return window.crypto && typeof window.crypto.randomUUID === 'function'
-      ? window.crypto.randomUUID()
-      : 'id-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-  }
+    async function handleSession(user) {
+      if (!user) {
+        state.bookmarks = [];
+        render();
+        els.appShell.classList.add('hidden');
+        els.authShell.classList.remove('hidden');
+        els.whoami.textContent = '';
+        return;
+      }
+      els.whoami.textContent = user.email || '(signed in)';
+      els.authShell.classList.add('hidden');
+      els.appShell.classList.remove('hidden');
+      await loadBookmarksFromCloud();
+    }
+
+    function showStatus(el, message, isError = false) {
+      el.textContent = message;
+      el.style.color = isError ? 'var(--err)' : 'var(--ok)';
+      el.classList.add('show');
+      clearTimeout(el._timer);
+      el._timer = setTimeout(() => el.classList.remove('show'), 3600);
+    }
+
+    async function signIn() {
+      console.log('SIGN IN CLICKED');
+      const email = els.authEmail.value.trim();
+      const password = els.authPassword.value.trim();
+      console.log({ email, password });
+      if (!email || !password) {
+        showStatus(els.authStatus, 'Enter email and password.', true);
+        return;
+      }
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      console.log('signin result', { data, error });
+      if (error) {
+        showStatus(els.authStatus, error.message || 'Sign in failed.', true);
+        return;
+      }
+      showStatus(els.authStatus, 'Signed in.');
+    }
+
+    async function signUp() {
+      console.log('SIGN UP CLICKED');
+      const email = els.authEmail.value.trim();
+      const password = els.authPassword.value.trim();
+      console.log({ email, password });
+      if (!email || !password) {
+        showStatus(els.authStatus, 'Enter email and password.', true);
+        return;
+      }
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      console.log('signup result', { data, error });
+      if (error) {
+        showStatus(els.authStatus, error.message || 'Sign up failed.', true);
+        return;
+      }
+      showStatus(els.authStatus, 'Sign up successful. Check your email if confirmation is enabled.');
+    }
+
+    async function resetPassword() {
+      const email = els.authEmail.value.trim();
+      if (!email) {
+        showStatus(els.authStatus, 'Enter your email first.', true);
+        return;
+      }
+      const redirectTo = window.location.origin + window.location.pathname;
+      const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+      if (error) {
+        showStatus(els.authStatus, error.message || 'Reset failed.', true);
+        return;
+      }
+      showStatus(els.authStatus, 'Password reset email sent.');
+    }
+
+    async function signOut() {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        showStatus(els.appStatus, error.message || 'Sign out failed.', true);
+        return;
+      }
+      showStatus(els.authStatus, 'Signed out.');
+    }
+
+    async function loadBookmarksFromCloud() {
+      const { data, error } = await supabase
+        .from('bookmarks')
+        .select('id, user_id, title, url, description, image, tag, created_at, updated_at')
+        .order('updated_at', { ascending: false, nullsFirst: false })
+        .order('created_at', { ascending: false });
+      if (error) {
+        state.bookmarks = [];
+        render();
+        showStatus(els.appStatus, error.message || 'Could not load bookmarks. Check table + RLS setup.', true);
+        return;
+      }
+      state.bookmarks = Array.isArray(data) ? data : [];
+      render();
+      showStatus(els.appStatus, 'Bookmarks loaded from cloud.');
+    }
+
+    async function saveBookmark() {
+      const title = els.title.value.trim();
+      const url = normalizeUrl(els.url.value.trim());
+      const description = els.desc.value.trim();
+      const image = els.image.value.trim();
+      const tag = els.tag.value.trim() || 'Saved';
+      const editingId = els.editingId.value.trim();
+
+      if (!title || !url) { showStatus(els.appStatus, 'Please enter both title and URL.', true); return; }
+      if (!isValidUrl(url)) { showStatus(els.appStatus, 'Please enter a valid URL.', true); return; }
+      if (image && !isLikelyUrl(image)) { showStatus(els.appStatus, 'Thumbnail image URL is not valid.', true); return; }
+
+      if (editingId) {
+        const payload = { title, url, description: description || 'Quick access bookmark', image, tag, updated_at: new Date().toISOString() };
+        const { data, error } = await supabase.from('bookmarks').update(payload).eq('id', editingId).select().single();
+        if (error) { showStatus(els.appStatus, error.message || 'Update failed.', true); return; }
+        state.bookmarks = state.bookmarks.map((b) => b.id === editingId ? data : b);
+        resetForm();
+        render();
+        showStatus(els.appStatus, 'Bookmark updated in cloud.');
+      } else {
+        const payload = { user_id: currentUser.id, title, url, description: description || 'Quick access bookmark', image, tag };
+        const { data, error } = await supabase.from('bookmarks').insert(payload).select().single();
+        if (error) { showStatus(els.appStatus, error.message || 'Save failed.', true); return; }
+        state.bookmarks.unshift(data);
+        resetForm();
+        render();
+        showStatus(els.appStatus, 'Bookmark saved to cloud.');
+      }
+    }
+
+    async function deleteBookmark(id) {
+      const item = state.bookmarks.find((b) => b.id === id);
+      if (!item) return;
+      if (!confirm(`Delete "${item.title}"?`)) return;
+      const { error } = await supabase.from('bookmarks').delete().eq('id', id);
+      if (error) { showStatus(els.appStatus, error.message || 'Delete failed.', true); return; }
+      state.bookmarks = state.bookmarks.filter((b) => b.id !== id);
+      if (els.editingId.value === id) resetForm();
+      render();
+      showStatus(els.appStatus, 'Bookmark deleted from cloud.');
+    }
+
+    function editBookmark(id) {
+      const item = state.bookmarks.find((b) => b.id === id);
+      if (!item) return;
+      els.editingId.value = item.id;
+      els.title.value = item.title || '';
+      els.url.value = item.url || '';
+      els.desc.value = item.description || '';
+      els.image.value = item.image || '';
+      els.tag.value = item.tag || '';
+      els.saveBtn.textContent = 'Update bookmark';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      els.title.focus();
+    }
+
+    function resetForm() {
+      els.form.reset();
+      els.editingId.value = '';
+      els.saveBtn.textContent = 'Save bookmark';
+    }
+
+    function render() {
+      const filtered = state.bookmarks.filter((item) => matchesQuery(item, state.query));
+      els.cards.innerHTML = '';
+      els.bookmarkCount.textContent = String(state.bookmarks.length);
+      if (!filtered.length) {
+        els.emptyState.classList.remove('hidden');
+        els.cards.classList.add('hidden');
+        return;
+      }
+      els.emptyState.classList.add('hidden');
+      els.cards.classList.remove('hidden');
+      for (const item of filtered) {
+        els.cards.appendChild(state.view === 'gallery' ? buildGalleryCard(item) : buildListItem(item));
+      }
+    }
+
+    function buildGalleryCard(item) {
+      const node = els.cardTemplate.content.firstElementChild.cloneNode(true);
+      const link = node.querySelector('.card-link');
+      const title = node.querySelector('[data-title]');
+      const desc = node.querySelector('[data-desc]');
+      const tag = node.querySelector('[data-tag]');
+      const domain = node.querySelector('[data-domain]');
+      const initials = node.querySelector('[data-initials]');
+      const img = node.querySelector('.thumb-img');
+      const fallback = node.querySelector('.thumb-fallback');
+      const editBtn = node.querySelector('[data-edit]');
+      const deleteBtn = node.querySelector('[data-delete]');
+      link.href = item.url;
+      title.textContent = item.title || 'Untitled';
+      desc.textContent = item.description || 'Quick access bookmark';
+      tag.textContent = item.tag || 'Saved';
+      domain.textContent = getDomain(item.url);
+      initials.textContent = getInitials(item.title, item.url);
+      if (item.image && isLikelyUrl(item.image)) {
+        img.src = item.image;
+        img.alt = item.title || 'Bookmark thumbnail';
+        img.hidden = false;
+        fallback.hidden = true;
+        img.onerror = () => { img.hidden = true; fallback.hidden = false; };
+      } else {
+        img.hidden = true;
+        fallback.hidden = false;
+      }
+      editBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); editBookmark(item.id); });
+      deleteBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); deleteBookmark(item.id); });
+      return node;
+    }
+
+    function buildListItem(item) {
+      const node = els.listTemplate.content.firstElementChild.cloneNode(true);
+      const main = node.querySelector('.list-main');
+      const title = node.querySelector('[data-title]');
+      const tag = node.querySelector('[data-tag]');
+      const domain = node.querySelector('[data-domain]');
+      const editBtn = node.querySelector('[data-edit]');
+      const deleteBtn = node.querySelector('[data-delete]');
+      main.href = item.url;
+      title.textContent = item.title || 'Untitled';
+      tag.textContent = (item.tag || 'Saved').slice(0, 10);
+      domain.textContent = getDomain(item.url);
+      editBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); editBookmark(item.id); });
+      deleteBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); deleteBookmark(item.id); });
+      return node;
+    }
+
+    function setView(mode) {
+      state.view = mode === 'list' ? 'list' : 'gallery';
+      try { localStorage.setItem(VIEW_KEY, state.view); } catch {}
+      applyViewMode();
+      render();
+    }
+
+    function loadView() {
+      try { return localStorage.getItem(VIEW_KEY) === 'list' ? 'list' : 'gallery'; } catch { return 'gallery'; }
+    }
+
+    function applyViewMode() {
+      els.cards.classList.toggle('gallery-view', state.view === 'gallery');
+      els.cards.classList.toggle('list-view', state.view === 'list');
+      els.galleryViewBtn.classList.toggle('active', state.view === 'gallery');
+      els.listViewBtn.classList.toggle('active', state.view === 'list');
+    }
+
+    function matchesQuery(item, query) {
+      if (!query) return true;
+      const hay = [item.title, item.description, item.tag, item.url, getDomain(item.url)].filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(query);
+    }
+
+    function exportBookmarks() {
+      const blob = new Blob([JSON.stringify(state.bookmarks, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'bookmarks-export.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function importBookmarks(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || '[]'));
+          if (!Array.isArray(parsed)) throw new Error('Invalid file');
+          const sanitized = parsed.filter(isValidBookmark).map((item) => ({
+            user_id: currentUser.id,
+            title: String(item.title || '').trim(),
+            url: normalizeUrl(String(item.url || '').trim()),
+            description: String(item.description || item.desc || 'Quick access bookmark').trim(),
+            image: String(item.image || '').trim(),
+            tag: String(item.tag || 'Saved').trim()
+          }));
+          if (!sanitized.length) {
+            showStatus(els.appStatus, 'No valid bookmarks found in file.', true);
+            return;
+          }
+          const { error } = await supabase.from('bookmarks').insert(sanitized);
+          if (error) {
+            showStatus(els.appStatus, error.message || 'Import failed.', true);
+            return;
+          }
+          els.importFile.value = '';
+          await loadBookmarksFromCloud();
+          showStatus(els.appStatus, 'Bookmarks imported to cloud.');
+        } catch {
+          showStatus(els.appStatus, 'Import failed. Choose a valid bookmarks JSON file.', true);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function getInitials(title, url) {
+      const source = String(title || getDomain(url) || 'BM').trim();
+      const parts = source.replace(/https?:\/\//gi, '').split(/[^A-Za-z0-9]+/).filter(Boolean);
+      const chars = (parts[0]?.[0] || '') + (parts[1]?.[0] || parts[0]?.[1] || '');
+      return (chars.toUpperCase() || 'BM').slice(0, 2);
+    }
+
+    function getDomain(url) {
+      try { return new URL(normalizeUrl(url)).hostname.replace(/^www\./, ''); } catch { return url || ''; }
+    }
+
+    function isValidBookmark(item) {
+      if (!item || typeof item !== 'object') return false;
+      const title = String(item.title || '').trim();
+      const url = normalizeUrl(String(item.url || '').trim());
+      return !!title && isValidUrl(url);
+    }
+
+    function normalizeUrl(value) {
+      if (!value) return '';
+      if (/^https?:\/\//i.test(value)) return value;
+      return 'https://' + value;
+    }
+
+    function isValidUrl(value) {
+      try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol); } catch { return false; }
+    }
+
+    function isLikelyUrl(value) {
+      try { new URL(value); return true; } catch { return false; }
+    }
   </script>
 </body>
 </html>
