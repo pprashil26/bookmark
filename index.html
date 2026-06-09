@@ -41,9 +41,10 @@
     a { color: inherit; text-decoration: none; }
     button, input { font: inherit; }
     .hidden { display: none !important; }
-	#bookmarkBody.collapsed {
-  display: none;
-}
+
+    #bookmarkBody.collapsed {
+      display: none;
+    }
 
     .container {
       width: min(calc(100% - 28px), var(--maxw));
@@ -106,16 +107,31 @@
 
     .panel-head {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
       margin-bottom: 14px;
+      flex-wrap: wrap;
     }
 
-    .panel-title { margin: 0; font-size: 1.05rem; font-weight: 700; }
-    .panel-note { margin: 4px 0 0; font-size: .82rem; color: var(--soft); }
+    .panel-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
 
-    .status { margin-top: 10px; font-size: .78rem; display: none; }
+    .panel-note {
+      margin: 4px 0 0;
+      font-size: .82rem;
+      color: var(--soft);
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: .78rem;
+      display: none;
+    }
+
     .status.show { display: block; }
 
     .search-wrap {
@@ -127,7 +143,12 @@
       border-radius: 20px;
     }
 
-    .search-wrap svg { width: 18px; height: 18px; color: var(--soft); }
+    .search-wrap svg {
+      width: 18px;
+      height: 18px;
+      color: var(--soft);
+    }
+
     .search-wrap input {
       width: 100%;
       border: none;
@@ -136,9 +157,15 @@
       color: var(--text);
       font-size: .98rem;
     }
-    .search-wrap input::placeholder { color: rgba(255,255,255,.42); }
 
-    .bar-chip, .secondary-btn, .ghost-btn, .view-btn {
+    .search-wrap input::placeholder {
+      color: rgba(255,255,255,.42);
+    }
+
+    .bar-chip,
+    .secondary-btn,
+    .ghost-btn,
+    .view-btn {
       border-radius: 999px;
       border: 1px solid var(--line);
       background: rgba(255,255,255,.06);
@@ -161,6 +188,15 @@
       border-color: var(--line-strong);
       color: var(--text);
       transform: translateY(-1px);
+    }
+
+    .secondary-btn:disabled,
+    .ghost-btn:disabled,
+    .view-btn:disabled,
+    .primary-btn:disabled {
+      cursor: default;
+      opacity: .7;
+      transform: none !important;
     }
 
     .view-switch {
@@ -195,7 +231,9 @@
       transition: 160ms ease;
     }
 
-    .primary-btn:hover { transform: translateY(-1px) scale(1.01); }
+    .primary-btn:hover {
+      transform: translateY(-1px) scale(1.01);
+    }
 
     .form-grid {
       display: grid;
@@ -222,7 +260,9 @@
       box-shadow: 0 0 0 4px rgba(255,255,255,.05);
     }
 
-    .field input::placeholder { color: rgba(255,255,255,.36); }
+    .field input::placeholder {
+      color: rgba(255,255,255,.36);
+    }
 
     .toolbar {
       display: flex;
@@ -233,15 +273,24 @@
       flex-wrap: wrap;
     }
 
-    .toolbar-left, .toolbar-right {
+    .toolbar-left,
+    .toolbar-right {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .toolbar-label { font-size: .88rem; font-weight: 700; color: rgba(255,255,255,.9); }
-    .muted { color: var(--soft); font-size: .8rem; }
+    .toolbar-label {
+      font-size: .88rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.9);
+    }
+
+    .muted {
+      color: var(--soft);
+      font-size: .8rem;
+    }
 
     .cards.gallery-view {
       display: grid;
@@ -289,7 +338,9 @@
       transition: transform 260ms ease;
     }
 
-    .card:hover .thumb-img { transform: scale(1.045); }
+    .card:hover .thumb-img {
+      transform: scale(1.045);
+    }
 
     .thumb-fallback {
       position: absolute;
@@ -334,8 +385,7 @@
       background: linear-gradient(180deg, rgba(7,10,20,.05) 0%, rgba(7,10,20,.10) 40%, rgba(4,5,10,.72) 100%);
       pointer-events: none;
     }
-
-    .thumb-top {
+	.thumb-top {
       position: absolute;
       top: 12px;
       left: 12px;
@@ -386,7 +436,10 @@
       background: rgba(255,255,255,.10);
     }
 
-    .card-body { padding: 14px 16px 16px; min-width: 0; }
+    .card-body {
+      padding: 14px 16px 16px;
+      min-width: 0;
+    }
 
     .card-title-row {
       display: flex;
@@ -464,7 +517,7 @@
     .cards.list-view .list-title,
     .cards.list-view .list-domain,
     .cards.list-view .tiny-chip {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
     }
 
     .list-item {
@@ -485,7 +538,11 @@
       background: rgba(255,255,255,.04);
     }
 
-    .list-main { min-width: 0; display: block; padding-right: 2px; }
+    .list-main {
+      min-width: 0;
+      display: block;
+      padding-right: 2px;
+    }
 
     .list-title-row {
       display: flex;
@@ -502,98 +559,26 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       line-height: 1.1;
-      letter-spacing: 0;
     }
 
     .list-meta {
       min-width: 0;
       display: flex;
-      align-items: center;
-      gap: 6px;
       justify-content: flex-end;
     }
 
     .list-domain {
       font-size: .66rem;
       color: var(--soft);
-      overflow: hidden;
-      text-overflow: ellipsis;
       white-space: nowrap;
       max-width: 160px;
-      opacity: .88;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .list-actions {
       display: flex;
-      align-items: center;
       gap: 3px;
-    }
-
-    .auth-shell {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 22px;
-    }
-
-    .auth-card {
-      width: min(100%, 520px);
-      border-radius: 30px;
-      padding: 24px;
-    }
-
-    .auth-title {
-      margin: 8px 0 8px;
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -.03em;
-    }
-
-    .auth-sub {
-      margin: 0 0 18px;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .auth-stack { display: grid; gap: 12px; }
-    .auth-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-    .setup-box {
-      margin-top: 16px;
-      padding: 14px;
-      border-radius: 18px;
-      border: 1px dashed rgba(255,255,255,.18);
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      font-size: .84rem;
-      line-height: 1.7;
-    }
-
-    .code-inline {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      color: #fff;
-    }
-
-    .empty {
-      display: grid;
-      place-items: center;
-      min-height: 260px;
-      border-radius: 28px;
-      border: 1px dashed rgba(255,255,255,.18);
-      background: rgba(255,255,255,.04);
-      padding: 28px;
-      text-align: center;
-    }
-
-    .footer-note {
-      margin-top: 18px;
-      color: var(--soft);
-      font-size: .78rem;
-      text-align: center;
-    }
-
-    @media (max-width: 1400px) {
-      .cards.gallery-view { grid-template-columns: repeat(4, minmax(0,1fr)); }
     }
 
     @media (max-width: 1100px) {
@@ -611,17 +596,9 @@
       }
 
       .panel { padding: 14px; border-radius: 24px; }
-      .search-wrap { min-height: 54px; }
       .form-grid { grid-template-columns: 1fr; }
-      .cards.gallery-view { grid-template-columns: 1fr; gap: 14px; }
-      .cards.list-view { gap: 2px; }
-      .list-item { grid-template-columns: 1fr auto; padding: 3px 5px; min-height: 26px; }
-      .panel-head, .toolbar { align-items: flex-start; }
-      .panel-head { flex-direction: column; }
-      .card-body { padding: 13px 14px 14px; }
-      .thumb-top { top: 10px; left: 10px; right: 10px; }
-      .chip { max-width: 68%; }
-      .auth-card { padding: 18px; }
+      .cards.gallery-view { grid-template-columns: 1fr; }
+      .list-item { grid-template-columns: 1fr auto; }
     }
   </style>
 </head>
@@ -630,11 +607,10 @@
     <div class="auth-card glass">
       <div class="eyebrow">Bookmarks · Cloud Sync</div>
       <h1 class="auth-title">Sign in to your bookmark app</h1>
-      <p class="auth-sub">This version uses Supabase Authentication and a Supabase database, so your bookmarks can sync across devices after login.</p>
 
       <div class="auth-stack">
-        <label class="field"><input id="authEmail" type="email" placeholder="Email address" autocomplete="email" /></label>
-        <label class="field"><input id="authPassword" type="password" placeholder="Password" autocomplete="current-password" /></label>
+        <label class="field"><input id="authEmail" type="email" placeholder="Email address" /></label>
+        <label class="field"><input id="authPassword" type="password" placeholder="Password" /></label>
       </div>
 
       <div class="auth-actions" style="margin-top:14px;">
@@ -644,460 +620,209 @@
       </div>
 
       <div id="authStatus" class="status"></div>
-
-      <div id="setupBox" class="setup-box hidden">
-        <strong>Setup needed:</strong><br>
-        Add your Supabase project URL and anon key in the config section near the top of the file.<br>
-        Then create a <span class="code-inline">bookmarks</span> table and enable RLS as shown in the chat instructions.
-      </div>
     </div>
   </section>
-
-  <main id="appShell" class="container hidden">
+<main id="appShell" class="container hidden">
     <section class="topbar">
       <div>
         <div class="eyebrow">Personal Space</div>
         <h1>My Beautiful Bookmarks</h1>
-        <p class="subtitle">A compact, elegant bookmark wall inspired by YouTube-style thumbnails — now backed by Supabase login and synced bookmarks.</p>
+        <p class="subtitle">
+          A compact, elegant bookmark wall — synced via Supabase.
+        </p>
       </div>
 
-      <label class="search-wrap glass" aria-label="Search bookmarks">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="7"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input id="searchInput" type="search" placeholder="Search bookmarks by title, tag, description, or domain..." autocomplete="off" />
+      <label class="search-wrap glass">
+        <input id="searchInput" type="search" placeholder="Search bookmarks..." />
       </label>
     </section>
 
     <section class="panel glass">
       <div class="panel-head">
-  <div>
-  <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" id="bookmarkToggle">
-    <h2 class="panel-title">Add or edit bookmark</h2>
-    <span id="toggleIcon" style="font-size:.9rem;color:var(--soft);">▾</span>
-  </div>
-  <p class="panel-note">Signed in as <span id="whoami" class="code-inline"></span></p>
-</div>
+        <div>
+          <div id="bookmarkToggle" style="cursor:pointer;">
+            <h2 class="panel-title">Add or edit bookmark</h2>
+            <span id="toggleIcon">▸</span>
+          </div>
+          <p class="panel-note">
+            Signed in as <span id="whoami"></span>
+          </p>
+        </div>
 
-  <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    <div class="bar-chip"><span id="bookmarkCount">0</span> saved</div>
-    <button class="secondary-btn" id="exportBtn" type="button">Export JSON</button>
-    <button class="secondary-btn" id="importBtn" type="button">Import JSON</button>
-    <button class="ghost-btn" id="signOutBtn" type="button">Sign out</button>
-    <input id="importFile" type="file" accept="application/json" class="hidden" />
-  </div>
-</div>
+        <div style="display:flex;gap:10px;">
+          <div class="bar-chip"><span id="bookmarkCount">0</span> saved</div>
+          <button id="signOutBtn" class="ghost-btn">Sign out</button>
+        </div>
+      </div>
 
-      <div id="bookmarkBody">
-	  <form id="bookmarkForm" class="form-grid" autocomplete="off">
-        <input type="hidden" id="editingId" />
-        <label class="field"><input id="titleInput" type="text" placeholder="Title *" maxlength="90" required /></label>
-        <label class="field"><input id="urlInput" type="url" placeholder="URL * (https://...)" required /></label>
-        <label class="field"><input id="descInput" type="text" placeholder="Short description" maxlength="180" /></label>
-        <label class="field"><input id="imageInput" type="url" placeholder="Thumbnail image URL (optional)" /></label>
-        <label class="field"><input id="tagInput" type="text" placeholder="Tag" maxlength="36" /></label>
-        <button class="primary-btn" id="saveBtn" type="submit">Save bookmark</button>
-      </form>
-	  </div>
+      <div id="bookmarkBody" class="collapsed">
+        <form id="bookmarkForm" class="form-grid">
+          <input type="hidden" id="editingId" />
+
+          <input id="titleInput" placeholder="Title *" required />
+          <input id="urlInput" placeholder="URL *" required />
+          <input id="descInput" placeholder="Description" />
+
+          <button class="primary-btn">Save bookmark</button>
+        </form>
+      </div>
 
       <div id="appStatus" class="status"></div>
     </section>
 
-    <section class="toolbar">
-      <div class="toolbar-left">
-        <div class="toolbar-label">Saved links</div>
-        <div class="muted">5 cards per row on desktop · gallery/text toggle · cloud sync</div>
-      </div>
+    <section id="cards" class="cards gallery-view"></section>
 
-      <div class="toolbar-right">
-        <div class="view-switch" aria-label="Display mode">
-          <button class="view-btn active" id="galleryViewBtn" type="button">Gallery</button>
-          <button class="view-btn" id="listViewBtn" type="button">Text</button>
-        </div>
-        <button class="ghost-btn" id="clearAllBtn" type="button">Clear all</button>
-      </div>
-    </section>
-
-    <section id="cards" class="cards gallery-view" aria-live="polite"></section>
     <section id="emptyState" class="empty hidden">
-      <div>
-        <h3>No bookmarks to show</h3>
-        <p>Add your first bookmark above. It will be stored in Supabase and available after login from another device.</p>
-      </div>
+      <p>No bookmarks yet</p>
     </section>
-
-    <p class="footer-note">Hosted on GitHub Pages. Auth and bookmark syncing handled by Supabase.</p>
   </main>
 
-  <template id="cardTemplate">
-    <article class="card">
-      <a class="card-link" target="_blank" rel="noopener noreferrer">
-        <div class="thumb-wrap">
-          <div class="thumb-fallback">
-            <div class="thumb-pattern"></div>
-            <div class="thumb-icon" data-initials></div>
-          </div>
-          <img class="thumb-img" alt="" hidden />
-          <div class="thumb-overlay"></div>
-          <div class="thumb-top">
-            <div class="chip" data-tag></div>
-            <div style="display:flex;gap:6px;">
-              <button class="icon-btn" type="button" data-edit title="Edit bookmark">E</button>
-              <button class="icon-btn" type="button" data-delete title="Delete bookmark">X</button>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-title-row">
-            <h3 class="card-title" data-title></h3>
-            <div class="tiny-chip">LINK</div>
-          </div>
-          <p class="card-desc" data-desc></p>
-          <div class="card-footer">
-            <div class="domain" data-domain></div>
-            <div class="visit-pill">Visit →</div>
-          </div>
-        </div>
-      </a>
-    </article>
-  </template>
-
-  <template id="listTemplate">
-    <article class="list-item">
-      <a class="list-main" target="_blank" rel="noopener noreferrer">
-        <div class="list-title-row">
-          <div class="list-title" data-title></div>
-          <div class="tiny-chip" data-tag></div>
-        </div>
-      </a>
-      <div class="list-meta"><div class="list-domain" data-domain></div></div>
-      <div class="list-actions">
-        <button class="icon-btn" type="button" data-edit title="Edit bookmark">E</button>
-        <button class="icon-btn" type="button" data-delete title="Delete bookmark">X</button>
-      </div>
-    </article>
-  </template>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     const SUPABASE_URL = 'https://xqbxmjcgrvrxpdzndknv.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
-    const VIEW_KEY = 'beautiful-bookmarks-supabase-view-v1';
+    const SUPABASE_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
 
-    const isConfigured =
-      !!SUPABASE_URL &&
-      !!SUPABASE_ANON_KEY &&
-      !SUPABASE_URL.includes('YOUR_SUPABASE_URL') &&
-      !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY');
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let sbClient = null;
     let currentUser = null;
-
-    const state = {
-      bookmarks: [],
-      query: '',
-      view: loadView()
-    };
+    let bookmarks = [];
 
     const els = {
       authShell: document.getElementById('authShell'),
       appShell: document.getElementById('appShell'),
-      setupBox: document.getElementById('setupBox'),
-      authEmail: document.getElementById('authEmail'),
-      authPassword: document.getElementById('authPassword'),
+      whoami: document.getElementById('whoami'),
+
+      email: document.getElementById('authEmail'),
+      password: document.getElementById('authPassword'),
+
       signInBtn: document.getElementById('signInBtn'),
       signUpBtn: document.getElementById('signUpBtn'),
-      resetPwdBtn: document.getElementById('resetPwdBtn'),
-      authStatus: document.getElementById('authStatus'),
+      resetBtn: document.getElementById('resetPwdBtn'),
 
-      whoami: document.getElementById('whoami'),
-      searchInput: document.getElementById('searchInput'),
-      cards: document.getElementById('cards'),
-      emptyState: document.getElementById('emptyState'),
-      bookmarkCount: document.getElementById('bookmarkCount'),
+      status: document.getElementById('authStatus'),
+
+      bookmarkBody: document.getElementById('bookmarkBody'),
+      toggleIcon: document.getElementById('toggleIcon'),
+      toggle: document.getElementById('bookmarkToggle'),
+
       form: document.getElementById('bookmarkForm'),
-      editingId: document.getElementById('editingId'),
       title: document.getElementById('titleInput'),
       url: document.getElementById('urlInput'),
       desc: document.getElementById('descInput'),
-      image: document.getElementById('imageInput'),
-      tag: document.getElementById('tagInput'),
-      saveBtn: document.getElementById('saveBtn'),
-      exportBtn: document.getElementById('exportBtn'),
-      importBtn: document.getElementById('importBtn'),
-      importFile: document.getElementById('importFile'),
-      signOutBtn: document.getElementById('signOutBtn'),
-      clearAllBtn: document.getElementById('clearAllBtn'),
-      galleryViewBtn: document.getElementById('galleryViewBtn'),
-      listViewBtn: document.getElementById('listViewBtn'),
-      cardTemplate: document.getElementById('cardTemplate'),
-      listTemplate: document.getElementById('listTemplate'),
-      appStatus: document.getElementById('appStatus')
+
+      cards: document.getElementById('cards'),
+      empty: document.getElementById('emptyState')
     };
 
     init();
 
     async function init() {
-      const supabaseGlobal = window.supabase;
-
-      if (!supabaseGlobal || typeof supabaseGlobal.createClient !== 'function') {
-        showStatus(els.authStatus, 'Supabase library failed to load.', true);
-        return;
-      }
-
-      if (!isConfigured) {
-        els.setupBox.classList.remove('hidden');
-        showStatus(els.authStatus, 'Add your Supabase URL and anon key first.', true);
-        bindAuthOnly();
-        return;
-      }
-
-      sbClient = supabaseGlobal.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
       bindEvents();
-      applyViewMode();
 
-      const { data: { session }, error } = await sbClient.auth.getSession();
-      if (error) {
-        showStatus(els.authStatus, error.message || 'Could not check session.', true);
-      }
+      const { data } = await sb.auth.getSession();
+      currentUser = data?.session?.user || null;
 
-      currentUser = session?.user || null;
-      await handleSession(currentUser);
+      handleSession(currentUser);
 
-      sbClient.auth.onAuthStateChange(async (_event, sessionInfo) => {
-        currentUser = sessionInfo?.user || null;
-        await handleSession(currentUser);
+      sb.auth.onAuthStateChange((event, session) => {
+        currentUser = session?.user || null;
+        handleSession(currentUser);
       });
-    }
-
-    function bindAuthOnly() {
-      els.signInBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
-      els.signUpBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
-      els.resetPwdBtn.addEventListener('click', () => showStatus(els.authStatus, 'Configure Supabase first.', true));
     }
 
     function bindEvents() {
-	const toggleBtn = document.getElementById('bookmarkToggle');
-const body = document.getElementById('bookmarkBody');
-const icon = document.getElementById('toggleIcon');
+      els.signInBtn.onclick = signIn;
+      els.signUpBtn.onclick = signUp;
+      els.resetBtn.onclick = resetPassword;
 
-// default collapsed
-body.classList.add('collapsed');
+      els.toggle.onclick = () => toggleForm();
 
-toggleBtn.addEventListener('click', () => {
-  body.classList.toggle('collapsed');
-  icon.textContent = body.classList.contains('collapsed') ? '▸' : '▾';
-});
-      els.signInBtn.addEventListener('click', signIn);
-      els.signUpBtn.addEventListener('click', signUp);
-      els.resetPwdBtn.addEventListener('click', resetPassword);
-      els.signOutBtn.addEventListener('click', signOut);
-
-      els.searchInput.addEventListener('input', (e) => {
-        state.query = e.target.value.trim().toLowerCase();
-        render();
-      });
-
-      els.form.addEventListener('submit', async (e) => {
+      els.form.onsubmit = async (e) => {
         e.preventDefault();
         await saveBookmark();
-      });
-
-      els.exportBtn.addEventListener('click', exportBookmarks);
-      els.importBtn.addEventListener('click', () => els.importFile.click());
-      els.importFile.addEventListener('change', importBookmarks);
-
-      els.galleryViewBtn.addEventListener('click', () => setView('gallery'));
-      els.listViewBtn.addEventListener('click', () => setView('list'));
-
-      els.clearAllBtn.addEventListener('click', async () => {
-        if (!state.bookmarks.length) return;
-        if (!currentUser) return;
-        if (!confirm('Clear all bookmarks from your cloud account?')) return;
-
-        const { error } = await sbClient
-          .from('bookmarks')
-          .delete()
-          .eq('user_id', currentUser.id);
-
-        if (error) {
-          showStatus(els.appStatus, error.message || 'Could not clear bookmarks.', true);
-          return;
-        }
-
-        state.bookmarks = [];
-        resetForm();
-        render();
-        showStatus(els.appStatus, 'All cloud bookmarks cleared.');
-      });
+      };
     }
 
-    async function handleSession(user) {
+    function toggleForm(force = null) {
+      const open = force !== null
+        ? force
+        : els.bookmarkBody.classList.contains('collapsed');
+
+      els.bookmarkBody.classList.toggle('collapsed', !open);
+      els.toggleIcon.textContent = open ? '▾' : '▸';
+    }
+
+    function handleSession(user) {
       if (!user) {
-        state.bookmarks = [];
-        resetForm();
-        render();
-        els.appShell.classList.add('hidden');
         els.authShell.classList.remove('hidden');
-        els.whoami.textContent = '';
+        els.appShell.classList.add('hidden');
         return;
       }
 
-      els.whoami.textContent = user.email || '(signed in)';
       els.authShell.classList.add('hidden');
       els.appShell.classList.remove('hidden');
-      await loadBookmarksFromCloud();
+
+      if (els.whoami) els.whoami.textContent = user.email;
+
+      loadBookmarks();
     }
 
-    function showStatus(el, message, isError = false) {
-      el.textContent = message;
-      el.style.color = isError ? 'var(--err)' : 'var(--ok)';
-      el.classList.add('show');
-      clearTimeout(el._timer);
-      el._timer = setTimeout(() => el.classList.remove('show'), 3600);
+    function showStatus(msg, isError=false) {
+      els.status.textContent = msg;
+      els.status.style.color = isError ? 'var(--err)' : 'var(--ok)';
+      els.status.classList.add('show');
     }
-
-    async function signIn() {
-  if (!sbClient) {
-    showStatus(els.authStatus, 'Supabase is not ready.', true);
-    return;
-  }
-
-  const email = els.authEmail.value.trim();
-  const password = els.authPassword.value.trim();
-
-  if (!email || !password) {
-    showStatus(els.authStatus, 'Enter email and password.', true);
-    return;
-  }
-
-  const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    showStatus(els.authStatus, error.message || 'Sign in failed.', true);
-    return;
-  }
-
-  showStatus(els.authStatus, 'Signed in.');
-  currentUser = data.user;
-  await handleSession(currentUser);
-}
-
-// ✅ ADD THIS (critical fix)
-currentUser = data.user;
-await handleSession(currentUser);
-
-
-    async function signUp() {
-      if (!sbClient) {
-        showStatus(els.authStatus, 'Supabase is not ready.', true);
-        return;
-      }
-
-      const email = els.authEmail.value.trim();
-      const password = els.authPassword.value.trim();
-
-      if (!email || !password) {
-        showStatus(els.authStatus, 'Enter email and password.', true);
-        return;
-      }
-
-      const { error } = await sbClient.auth.signUp({ email, password });
+	async function signOut() {
+      const { error } = await sb.auth.signOut();
 
       if (error) {
-        showStatus(els.authStatus, error.message || 'Sign up failed.', true);
+        showStatus(error.message || 'Sign out failed', true);
         return;
       }
 
-      showStatus(els.authStatus, 'Sign up successful. Check your email if confirmation is enabled.');
+      showStatus('Signed out');
     }
 
-    async function resetPassword() {
-      if (!sbClient) {
-        showStatus(els.authStatus, 'Supabase is not ready.', true);
-        return;
-      }
+    async function loadBookmarks() {
+      if (!currentUser) return;
 
-      const email = els.authEmail.value.trim();
-
-      if (!email) {
-        showStatus(els.authStatus, 'Enter your email first.', true);
-        return;
-      }
-
-      const redirectTo = window.location.origin + window.location.pathname;
-
-      const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo });
-
-      if (error) {
-        showStatus(els.authStatus, error.message || 'Reset failed.', true);
-        return;
-      }
-
-      showStatus(els.authStatus, 'Password reset email sent.');
-    }
-
-    async function signOut() {
-      if (!sbClient) return;
-
-      const { error } = await sbClient.auth.signOut();
-      if (error) {
-        showStatus(els.appStatus, error.message || 'Sign out failed.', true);
-        return;
-      }
-
-      showStatus(els.authStatus, 'Signed out.');
-    }
-
-    async function loadBookmarksFromCloud() {
-      if (!sbClient || !currentUser) return;
-
-      const { data, error } = await sbClient
+      const { data, error } = await sb
         .from('bookmarks')
-        .select('id, user_id, title, url, description, image, tag, created_at, updated_at')
+        .select('id, user_id, title, url, description, created_at, updated_at')
         .eq('user_id', currentUser.id)
         .order('updated_at', { ascending: false })
         .order('created_at', { ascending: false });
 
       if (error) {
-        state.bookmarks = [];
+        showStatus(error.message || 'Could not load bookmarks', true);
+        bookmarks = [];
         render();
-        showStatus(els.appStatus, error.message || 'Could not load bookmarks. Check table + RLS setup.', true);
         return;
       }
 
-      state.bookmarks = Array.isArray(data) ? data : [];
+      bookmarks = Array.isArray(data) ? data : [];
       render();
-      showStatus(els.appStatus, 'Bookmarks loaded from cloud.');
     }
 
     async function saveBookmark() {
-      if (!sbClient || !currentUser) {
-        showStatus(els.appStatus, 'You must be signed in.', true);
+      if (!currentUser) {
+        showStatus('You must be signed in', true);
         return;
       }
 
       const title = els.title.value.trim();
       const url = normalizeUrl(els.url.value.trim());
       const description = els.desc.value.trim();
-      const image = els.image.value.trim();
-      const tag = els.tag.value.trim() || 'Saved';
       const editingId = els.editingId.value.trim();
 
       if (!title || !url) {
-        showStatus(els.appStatus, 'Please enter both title and URL.', true);
+        showStatus('Please enter title and URL', true);
         return;
       }
 
       if (!isValidUrl(url)) {
-        showStatus(els.appStatus, 'Please enter a valid URL.', true);
-        return;
-      }
-
-      if (image && !isLikelyUrl(image)) {
-        showStatus(els.appStatus, 'Thumbnail image URL is not valid.', true);
+        showStatus('Please enter a valid URL', true);
         return;
       }
 
@@ -1106,12 +831,10 @@ await handleSession(currentUser);
           title,
           url,
           description: description || 'Quick access bookmark',
-          image,
-          tag,
           updated_at: new Date().toISOString()
         };
 
-        const { data, error } = await sbClient
+        const { data, error } = await sb
           .from('bookmarks')
           .update(payload)
           .eq('id', editingId)
@@ -1120,78 +843,84 @@ await handleSession(currentUser);
           .single();
 
         if (error) {
-          showStatus(els.appStatus, error.message || 'Update failed.', true);
+          showStatus(error.message || 'Update failed', true);
           return;
         }
 
-        state.bookmarks = state.bookmarks.map((b) => String(b.id) === String(editingId) ? data : b);
+        bookmarks = bookmarks.map((b) =>
+          String(b.id) === String(editingId) ? data : b
+        );
+
         resetForm();
+        toggleForm(false);
         render();
-        showStatus(els.appStatus, 'Bookmark updated in cloud.');
+        showAppStatus('Bookmark updated');
       } else {
         const payload = {
           user_id: currentUser.id,
           title,
           url,
-          description: description || 'Quick access bookmark',
-          image,
-          tag
+          description: description || 'Quick access bookmark'
         };
 
-        const { data, error } = await sbClient
+        const { data, error } = await sb
           .from('bookmarks')
           .insert(payload)
           .select()
           .single();
 
         if (error) {
-          showStatus(els.appStatus, error.message || 'Save failed.', true);
+          showAppStatus(error.message || 'Save failed', true);
           return;
         }
 
-        state.bookmarks.unshift(data);
+        bookmarks.unshift(data);
         resetForm();
+        toggleForm(false);
         render();
-        showStatus(els.appStatus, 'Bookmark saved to cloud.');
+        showAppStatus('Bookmark saved');
       }
     }
 
     async function deleteBookmark(id) {
-      if (!sbClient || !currentUser) return;
+      if (!currentUser) return;
 
-      const item = state.bookmarks.find((b) => String(b.id) === String(id));
+      const item = bookmarks.find((b) => String(b.id) === String(id));
       if (!item) return;
+
       if (!confirm(`Delete "${item.title}"?`)) return;
 
-      const { error } = await sbClient
+      const { error } = await sb
         .from('bookmarks')
         .delete()
         .eq('id', id)
         .eq('user_id', currentUser.id);
 
       if (error) {
-        showStatus(els.appStatus, error.message || 'Delete failed.', true);
+        showAppStatus(error.message || 'Delete failed', true);
         return;
       }
 
-      state.bookmarks = state.bookmarks.filter((b) => String(b.id) !== String(id));
-      if (String(els.editingId.value) === String(id)) resetForm();
+      bookmarks = bookmarks.filter((b) => String(b.id) !== String(id));
+
+      if (String(els.editingId.value) === String(id)) {
+        resetForm();
+      }
+
       render();
-      showStatus(els.appStatus, 'Bookmark deleted from cloud.');
+      showAppStatus('Bookmark deleted');
     }
 
     function editBookmark(id) {
-      const item = state.bookmarks.find((b) => String(b.id) === String(id));
+      const item = bookmarks.find((b) => String(b.id) === String(id));
       if (!item) return;
 
       els.editingId.value = item.id;
       els.title.value = item.title || '';
       els.url.value = item.url || '';
       els.desc.value = item.description || '';
-      els.image.value = item.image || '';
-      els.tag.value = item.tag || '';
-      els.saveBtn.textContent = 'Update bookmark';
 
+      toggleForm(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       els.title.focus();
     }
@@ -1199,62 +928,72 @@ await handleSession(currentUser);
     function resetForm() {
       els.form.reset();
       els.editingId.value = '';
-      els.saveBtn.textContent = 'Save bookmark';
+    }
+
+    function showAppStatus(message, isError = false) {
+      const el = document.getElementById('appStatus');
+      if (!el) return;
+
+      el.textContent = message;
+      el.style.color = isError ? 'var(--err)' : 'var(--ok)';
+      el.classList.add('show');
+
+      clearTimeout(el._timer);
+      el._timer = setTimeout(() => el.classList.remove('show'), 2500);
     }
 
     function render() {
-      const filtered = state.bookmarks.filter((item) => matchesQuery(item, state.query));
+      const q = els.searchInput.value.trim().toLowerCase();
+
+      const filtered = bookmarks.filter((b) => {
+        const text = [
+          b.title || '',
+          b.url || '',
+          b.description || ''
+        ].join(' ').toLowerCase();
+
+        return text.includes(q);
+      });
+
       els.cards.innerHTML = '';
-      els.bookmarkCount.textContent = String(state.bookmarks.length);
+
+      const countEl = document.getElementById('bookmarkCount');
+      if (countEl) countEl.textContent = String(bookmarks.length);
 
       if (!filtered.length) {
-        els.emptyState.classList.remove('hidden');
+        els.empty.classList.remove('hidden');
         els.cards.classList.add('hidden');
         return;
       }
 
-      els.emptyState.classList.add('hidden');
+      els.empty.classList.add('hidden');
       els.cards.classList.remove('hidden');
 
       for (const item of filtered) {
-        els.cards.appendChild(state.view === 'gallery' ? buildGalleryCard(item) : buildListItem(item));
+        els.cards.appendChild(buildCard(item));
       }
     }
 
-    function buildGalleryCard(item) {
-      const node = els.cardTemplate.content.firstElementChild.cloneNode(true);
+    function buildCard(item) {
+      const tpl = document.getElementById('cardTemplate');
+      const node = tpl.content.firstElementChild.cloneNode(true);
+
       const link = node.querySelector('.card-link');
       const title = node.querySelector('[data-title]');
       const desc = node.querySelector('[data-desc]');
       const tag = node.querySelector('[data-tag]');
       const domain = node.querySelector('[data-domain]');
       const initials = node.querySelector('[data-initials]');
-      const img = node.querySelector('.thumb-img');
-      const fallback = node.querySelector('.thumb-fallback');
       const editBtn = node.querySelector('[data-edit]');
       const deleteBtn = node.querySelector('[data-delete]');
 
       link.href = item.url;
       title.textContent = item.title || 'Untitled';
       desc.textContent = item.description || 'Quick access bookmark';
-      tag.textContent = item.tag || 'Saved';
+      tag.textContent = 'Saved';
       domain.textContent = getDomain(item.url);
       initials.textContent = getInitials(item.title, item.url);
 
-      if (item.image && isLikelyUrl(item.image)) {
-        img.src = item.image;
-        img.alt = item.title || 'Bookmark thumbnail';
-        img.hidden = false;
-        fallback.hidden = true;
-        img.onerror = () => {
-          img.hidden = true;
-          fallback.hidden = false;
-        };
-      } else {
-        img.hidden = true;
-        fallback.hidden = false;
-      }
-
       editBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1268,163 +1007,6 @@ await handleSession(currentUser);
       });
 
       return node;
-    }
-
-    function buildListItem(item) {
-      const node = els.listTemplate.content.firstElementChild.cloneNode(true);
-      const main = node.querySelector('.list-main');
-      const title = node.querySelector('[data-title]');
-      const tag = node.querySelector('[data-tag]');
-      const domain = node.querySelector('[data-domain]');
-      const editBtn = node.querySelector('[data-edit]');
-      const deleteBtn = node.querySelector('[data-delete]');
-
-      main.href = item.url;
-      title.textContent = item.title || 'Untitled';
-      tag.textContent = (item.tag || 'Saved').slice(0, 10);
-      domain.textContent = getDomain(item.url);
-
-      editBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        editBookmark(item.id);
-      });
-
-      deleteBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        deleteBookmark(item.id);
-      });
-
-      return node;
-    }
-
-    function setView(mode) {
-      state.view = mode === 'list' ? 'list' : 'gallery';
-      try {
-        localStorage.setItem(VIEW_KEY, state.view);
-      } catch (_) {}
-      applyViewMode();
-      render();
-    }
-
-    function loadView() {
-      try {
-        return localStorage.getItem(VIEW_KEY) === 'list' ? 'list' : 'gallery';
-      } catch (_) {
-        return 'gallery';
-      }
-    }
-
-    function applyViewMode() {
-      els.cards.classList.toggle('gallery-view', state.view === 'gallery');
-      els.cards.classList.toggle('list-view', state.view === 'list');
-      els.galleryViewBtn.classList.toggle('active', state.view === 'gallery');
-      els.listViewBtn.classList.toggle('active', state.view === 'list');
-    }
-
-    function matchesQuery(item, query) {
-      if (!query) return true;
-      const hay = [
-        item.title,
-        item.description,
-        item.tag,
-        item.url,
-        getDomain(item.url)
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-
-      return hay.includes(query);
-    }
-
-    function exportBookmarks() {
-      const blob = new Blob([JSON.stringify(state.bookmarks, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'bookmarks-export.json';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    async function importBookmarks(event) {
-      if (!sbClient || !currentUser) {
-        showStatus(els.appStatus, 'You must be signed in.', true);
-        return;
-      }
-
-      const file = event.target.files && event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-
-      reader.onload = async () => {
-        try {
-          const parsed = JSON.parse(String(reader.result || '[]'));
-          if (!Array.isArray(parsed)) throw new Error('Invalid file');
-
-          const sanitized = parsed
-            .filter(isValidBookmark)
-            .map((item) => ({
-              user_id: currentUser.id,
-              title: String(item.title || '').trim(),
-              url: normalizeUrl(String(item.url || '').trim()),
-              description: String(item.description || item.desc || 'Quick access bookmark').trim(),
-              image: String(item.image || '').trim(),
-              tag: String(item.tag || 'Saved').trim()
-            }));
-
-          if (!sanitized.length) {
-            showStatus(els.appStatus, 'No valid bookmarks found in file.', true);
-            return;
-          }
-
-          const { error } = await sbClient.from('bookmarks').insert(sanitized);
-
-          if (error) {
-            showStatus(els.appStatus, error.message || 'Import failed.', true);
-            return;
-          }
-
-          els.importFile.value = '';
-          await loadBookmarksFromCloud();
-          showStatus(els.appStatus, 'Bookmarks imported to cloud.');
-        } catch (_) {
-          showStatus(els.appStatus, 'Import failed. Choose a valid bookmarks JSON file.', true);
-        }
-      };
-
-      reader.readAsText(file);
-    }
-
-    function getInitials(title, url) {
-      const source = String(title || getDomain(url) || 'BM').trim();
-      const parts = source
-        .replace(/https?:\/\//gi, '')
-        .split(/[^A-Za-z0-9]+/)
-        .filter(Boolean);
-
-      const chars = (parts[0]?.[0] || '') + (parts[1]?.[0] || parts[0]?.[1] || '');
-      return (chars.toUpperCase() || 'BM').slice(0, 2);
-    }
-
-    function getDomain(url) {
-      try {
-        return new URL(normalizeUrl(url)).hostname.replace(/^www\./, '');
-      } catch (_) {
-        return url || '';
-      }
-    }
-
-    function isValidBookmark(item) {
-      if (!item || typeof item !== 'object') return false;
-      const title = String(item.title || '').trim();
-      const url = normalizeUrl(String(item.url || '').trim());
-      return !!title && isValidUrl(url);
     }
 
     function normalizeUrl(value) {
@@ -1442,13 +1024,23 @@ await handleSession(currentUser);
       }
     }
 
-    function isLikelyUrl(value) {
+    function getDomain(url) {
       try {
-        const url = new URL(value);
-        return ['http:', 'https:'].includes(url.protocol);
+        return new URL(normalizeUrl(url)).hostname.replace(/^www\./, '');
       } catch (_) {
-        return false;
+        return url || '';
       }
+    }
+
+    function getInitials(title, url) {
+      const source = String(title || getDomain(url) || 'BM').trim();
+      const parts = source
+        .replace(/https?:\/\//gi, '')
+        .split(/[^A-Za-z0-9]+/)
+        .filter(Boolean);
+
+      const chars = (parts[0]?.[0] || '') + (parts[1]?.[0] || parts[0]?.[1] || '');
+      return (chars.toUpperCase() || 'BM').slice(0, 2);
     }
   </script>
 </body>
