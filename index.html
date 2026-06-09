@@ -41,6 +41,9 @@
     a { color: inherit; text-decoration: none; }
     button, input { font: inherit; }
     .hidden { display: none !important; }
+	#bookmarkBody.collapsed {
+  display: none;
+}
 
     .container {
       width: min(calc(100% - 28px), var(--maxw));
@@ -669,20 +672,22 @@
 
     <section class="panel glass">
       <div class="panel-head">
-        <div>
-          <h2 class="panel-title">Add or edit bookmark</h2>
-          <p class="panel-note">Signed in as <span id="whoami" class="code-inline"></span></p>
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <div class="bar-chip"><span id="bookmarkCount">0</span> saved</div>
-          <button class="secondary-btn" id="exportBtn" type="button">Export JSON</button>
-          <button class="secondary-btn" id="importBtn" type="button">Import JSON</button>
-          <button class="ghost-btn" id="signOutBtn" type="button">Sign out</button>
-          <input id="importFile" type="file" accept="application/json" class="hidden" />
-        </div>
-      </div>
+  <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" id="bookmarkToggle">
+    <h2 class="panel-title">Add or edit bookmark</h2>
+    <span id="toggleIcon" style="font-size:.9rem;color:var(--soft);">▾</span>
+  </div>
 
-      <form id="bookmarkForm" class="form-grid" autocomplete="off">
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <div class="bar-chip"><span id="bookmarkCount">0</span> saved</div>
+    <button class="secondary-btn" id="exportBtn" type="button">Export JSON</button>
+    <button class="secondary-btn" id="importBtn" type="button">Import JSON</button>
+    <button class="ghost-btn" id="signOutBtn" type="button">Sign out</button>
+    <input id="importFile" type="file" accept="application/json" class="hidden" />
+  </div>
+</div>
+
+      <div id="bookmarkBody">
+	  <form id="bookmarkForm" class="form-grid" autocomplete="off">
         <input type="hidden" id="editingId" />
         <label class="field"><input id="titleInput" type="text" placeholder="Title *" maxlength="90" required /></label>
         <label class="field"><input id="urlInput" type="url" placeholder="URL * (https://...)" required /></label>
@@ -691,6 +696,7 @@
         <label class="field"><input id="tagInput" type="text" placeholder="Tag" maxlength="36" /></label>
         <button class="primary-btn" id="saveBtn" type="submit">Save bookmark</button>
       </form>
+	  </div>
 
       <div id="appStatus" class="status"></div>
     </section>
@@ -870,6 +876,17 @@
     }
 
     function bindEvents() {
+	const toggleBtn = document.getElementById('bookmarkToggle');
+const body = document.getElementById('bookmarkBody');
+const icon = document.getElementById('toggleIcon');
+
+// default collapsed
+body.classList.add('collapsed');
+
+toggleBtn.addEventListener('click', () => {
+  body.classList.toggle('collapsed');
+  icon.textContent = body.classList.contains('collapsed') ? '▸' : '▾';
+});
       els.signInBtn.addEventListener('click', signIn);
       els.signUpBtn.addEventListener('click', signUp);
       els.resetPwdBtn.addEventListener('click', resetPassword);
