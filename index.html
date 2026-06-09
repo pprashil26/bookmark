@@ -676,10 +676,25 @@
       <p>No bookmarks yet</p>
     </section>
   </main>
+  
+   <template id="cardTemplate">
+  <article class="card">
+    <a class="card-link" target="_blank">
+      <div class="card-body">
+        <h3 data-title></h3>
+        <p data-desc></p>
+      </div>
+    </a>
+    <div>
+      <button data-edit>Edit</button>
+      <button data-delete>Delete</button>
+    </div>
+  </article>
+</template>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
+  
+   <script>
     const SUPABASE_URL = 'https://xqbxmjcgrvrxpdzndknv.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_HpK9KL2G600M6tuCr8yX1w_2E_lkLAB';
 
@@ -689,31 +704,34 @@
     let bookmarks = [];
 
     const els = {
-      authShell: document.getElementById('authShell'),
-      appShell: document.getElementById('appShell'),
-      whoami: document.getElementById('whoami'),
+  authShell: document.getElementById('authShell'),
+  appShell: document.getElementById('appShell'),
+  whoami: document.getElementById('whoami'),
 
-      email: document.getElementById('authEmail'),
-      password: document.getElementById('authPassword'),
+  email: document.getElementById('authEmail'),
+  password: document.getElementById('authPassword'),
 
-      signInBtn: document.getElementById('signInBtn'),
-      signUpBtn: document.getElementById('signUpBtn'),
-      resetBtn: document.getElementById('resetPwdBtn'),
+  signInBtn: document.getElementById('signInBtn'),
+  signUpBtn: document.getElementById('signUpBtn'),
+  resetBtn: document.getElementById('resetPwdBtn'),
+  signOutBtn: document.getElementById('signOutBtn'),
 
-      status: document.getElementById('authStatus'),
+  status: document.getElementById('authStatus'),
 
-      bookmarkBody: document.getElementById('bookmarkBody'),
-      toggleIcon: document.getElementById('toggleIcon'),
-      toggle: document.getElementById('bookmarkToggle'),
+  bookmarkBody: document.getElementById('bookmarkBody'),
+  toggleIcon: document.getElementById('toggleIcon'),
+  toggle: document.getElementById('bookmarkToggle'),
 
-      form: document.getElementById('bookmarkForm'),
-      title: document.getElementById('titleInput'),
-      url: document.getElementById('urlInput'),
-      desc: document.getElementById('descInput'),
+  form: document.getElementById('bookmarkForm'),
+  editingId: document.getElementById('editingId'),
+  title: document.getElementById('titleInput'),
+  url: document.getElementById('urlInput'),
+  desc: document.getElementById('descInput'),
 
-      cards: document.getElementById('cards'),
-      empty: document.getElementById('emptyState')
-    };
+  searchInput: document.getElementById('searchInput'),
+  cards: document.getElementById('cards'),
+  empty: document.getElementById('emptyState')
+};
 
     init();
 
@@ -732,17 +750,26 @@
     }
 
     function bindEvents() {
-      els.signInBtn.onclick = signIn;
-      els.signUpBtn.onclick = signUp;
-      els.resetBtn.onclick = resetPassword;
+  els.signInBtn.onclick = signIn;
+  els.signUpBtn.onclick = signUp;
+  els.resetBtn.onclick = resetPassword;
 
-      els.toggle.onclick = () => toggleForm();
+  if (els.signOutBtn) {
+    els.signOutBtn.onclick = signOut;
+  }
 
-      els.form.onsubmit = async (e) => {
-        e.preventDefault();
-        await saveBookmark();
-      };
-    }
+  els.toggle.onclick = () => toggleForm();
+
+  if (els.searchInput) {
+    els.searchInput.addEventListener('input', render);
+  }
+
+  els.form.onsubmit = async (e) => {
+    e.preventDefault();
+    await saveBookmark();
+  };
+}
+
 
     function toggleForm(force = null) {
       const open = force !== null
@@ -773,6 +800,79 @@
       els.status.style.color = isError ? 'var(--err)' : 'var(--ok)';
       els.status.classList.add('show');
     }
+	
+	async function signIn() {
+  const email = els.email.value.trim();
+  const password = els.password.value.trim();
+
+  if (!email || !password) {
+    showStatus('Enter email and password', true);
+    return;
+  }
+
+  const btnText = els.signInBtn.textContent;
+  els.signInBtn.disabled = true;
+  els.signInBtn.textContent = 'Signing in...';
+
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      showStatus(error.message || 'Sign in failed', true);
+      return;
+    }
+
+    showStatus('Signed in');
+    currentUser = data.user;
+    handleSession(currentUser);
+
+  } catch (err) {
+    showStatus(err?.message || 'Sign in failed', true);
+
+  } finally {
+    els.signInBtn.disabled = false;
+    els.signInBtn.textContent = btnText;
+  }
+}
+
+async function signUp() {
+  const email = els.email.value.trim();
+  const password = els.password.value.trim();
+
+  if (!email || !password) {
+    showStatus('Enter email and password', true);
+    return;
+  }
+
+  const { error } = await sb.auth.signUp({ email, password });
+
+  if (error) {
+    showStatus(error.message || 'Sign up failed', true);
+    return;
+  }
+
+  showStatus('Sign up successful');
+}
+
+async function resetPassword() {
+  const email = els.email.value.trim();
+
+  if (!email) {
+    showStatus('Enter email first', true);
+    return;
+  }
+
+  const { error } = await sb.auth.resetPasswordForEmail(email);
+
+  if (error) {
+    showStatus(error.message || 'Reset failed', true);
+    return;
+  }
+
+  showStatus('Reset email sent');
+}
+
+	
 	async function signOut() {
       const { error } = await sb.auth.signOut();
 
@@ -943,36 +1043,27 @@
     }
 
     function render() {
-      const q = els.searchInput.value.trim().toLowerCase();
+  const q = (els.searchInput?.value || '').toLowerCase();
 
-      const filtered = bookmarks.filter((b) => {
-        const text = [
-          b.title || '',
-          b.url || '',
-          b.description || ''
-        ].join(' ').toLowerCase();
+  const filtered = bookmarks.filter((b) => {
+    const text = [b.title, b.url, b.description].join(' ').toLowerCase();
+    return text.includes(q);
+  });
 
-        return text.includes(q);
-      });
+  els.cards.innerHTML = '';
 
-      els.cards.innerHTML = '';
+  if (!filtered.length) {
+    els.empty.classList.remove('hidden');
+    return;
+  }
 
-      const countEl = document.getElementById('bookmarkCount');
-      if (countEl) countEl.textContent = String(bookmarks.length);
+  els.empty.classList.add('hidden');
 
-      if (!filtered.length) {
-        els.empty.classList.remove('hidden');
-        els.cards.classList.add('hidden');
-        return;
-      }
-
-      els.empty.classList.add('hidden');
-      els.cards.classList.remove('hidden');
-
-      for (const item of filtered) {
-        els.cards.appendChild(buildCard(item));
-      }
-    }
+  for (const item of filtered) {
+    const el = buildCard(item);
+    if (el) els.cards.appendChild(el);
+  }
+}
 
     function buildCard(item) {
       const tpl = document.getElementById('cardTemplate');
