@@ -970,15 +970,19 @@ toggleBtn.addEventListener('click', () => {
         return;
       }
 
-      const { error } = await sbClient.auth.signInWithPassword({ email, password });
+      const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
 
-      if (error) {
-        showStatus(els.authStatus, error.message || 'Sign in failed.', true);
-        return;
-      }
+if (error) {
+  showStatus(els.authStatus, error.message || 'Sign in failed.', true);
+  return;
+}
 
-      showStatus(els.authStatus, 'Signed in.');
-    }
+showStatus(els.authStatus, 'Signed in.');
+
+// ✅ ADD THIS (critical fix)
+currentUser = data.user;
+await handleSession(currentUser);
+
 
     async function signUp() {
       if (!sbClient) {
